@@ -13,7 +13,7 @@ import StartLayout from "../../../components/Ui/StartLayout/StartLayout";
 import Headline from "../../../components/Ui/Headline/Headline";
 import Button from "../../../components/Ui/Button/Button";
 import { FormLayout } from "../../../components/Ui/FormElements/FormElements";
-import { CheckBoxIcon } from "../../../components/Icons";
+import { CheckBoxIcon } from "../../../components/icon";
 import Loader from "../../../components/Ui/Loading/loader";
 import { setUser, setRole } from "../../../redux/reducer/user";
 import { WrapperInput } from "./style";

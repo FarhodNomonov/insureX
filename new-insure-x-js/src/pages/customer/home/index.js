@@ -14,7 +14,7 @@ import {
   QuestionIcon,
   Question,
   MessageIcon,
-} from "../../../components/Icons/";
+} from "../../../components/icon/";
 import Footer from "../../../components/Ui/FooterComponent";
 import Header from "../../../components/Ui/Header";
 import { FooterQuestionBtn, HomeContainer, Overlay } from "./style";

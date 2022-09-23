@@ -3,7 +3,7 @@ import io from "socket.io-client";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import toast, { useToasterStore } from "react-hot-toast";
-import { Email, List, Localition, Home } from "../../../components/Icons";
+import { Email, List, Localition, Home } from "../../../components/icon";
 import { FooterWrapper } from "./footer.styled";
 import { _URL } from "../../../utils/requestApi";
 // import CallerModal from "../CallerModal";

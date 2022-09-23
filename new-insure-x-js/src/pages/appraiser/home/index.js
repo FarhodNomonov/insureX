@@ -1,9 +1,9 @@
 import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Header from "../../../components/Ui/Header";
-import { List, CalendarIcon, EmailTwo, Logo } from "../../../components/Icons";
+import { List, CalendarIcon, EmailTwo, Logo } from "../../../components/icon";
 import { HomeContainer } from "./style";
-import { CalendarAppreiser } from "../../../components/Icons";
+import { CalendarAppreiser } from "../../../components/icon";
 
 function HomePage() {
   const clientMessage = [];

@@ -22,7 +22,7 @@ import {
   Search,
   Galery,
   CloudUpload,
-} from "../../components/Icons";
+} from "../../components/icon";
 import DrawerCanvas from "../../components/Ui/drawerCanvas";
 import DrawerUser from "../../components/Ui/DrawerPodpis";
 import {
