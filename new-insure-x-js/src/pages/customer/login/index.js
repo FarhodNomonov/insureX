@@ -54,7 +54,7 @@ const Login = () => {
             JSON.stringify(__respons?.message?.user ?? {})
           );
           reset();
-          navigate("/customer", { replace: false });
+          navigate("/", { replace: true });
         } else {
           setIsLoading(false);
           errorMessage("שם משתמש או סיסמה שגויים");
@@ -69,7 +69,7 @@ const Login = () => {
 
   return (
     <StartLayout textBg="">
-      <div className="wrap contentWrap" >
+      <div className="wrap contentWrap">
         {isLoading && <Loader />}
         <FormLayout>
           <Headline>{"כניסה"}</Headline>
@@ -126,7 +126,7 @@ const Login = () => {
             <Button type="submit">{"התחבר"}</Button>
           </form>
 
-          <Link to="/auth/sign-in/customer">
+          <Link to="/sign-in">
             <Button variant="ghost">{"משלב"}</Button>
           </Link>
         </FormLayout>

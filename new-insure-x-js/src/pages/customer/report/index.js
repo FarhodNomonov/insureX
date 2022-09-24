@@ -36,7 +36,6 @@ function ReportPage() {
     setIsHelpModal(2);
     reset();
   };
-  console.log(Person?.first_name);
   return (
     <div className="flex__column__ report__cont h-100">
       <div>

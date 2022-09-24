@@ -15,13 +15,13 @@ function Header({
   const dispatch = useDispatch();
   const [open, setopen] = React.useState(false);
   const user = useSelector(({ user }) => user);
-
+ const isRole = ["customer", "none"].includes(user.role) ? false : true;
   return (
     <HeaderStyled>
       <div className="header__top__bar" style={{ backgroundColor: bg }}>
         <div className="header__top__bar__logo">
           <p>{head}</p>
-          <NavLink to={`/${localStorage.getItem("role") ?? "customer"}`}>
+          <NavLink to={`/`}>
             <i.Logo />
           </NavLink>
         </div>
@@ -40,10 +40,10 @@ function Header({
             <div
               className="poput_log_out"
               onClick={() => {
-                navigate(`/auth/login/${user?.role}`);
+                navigate(`/login${`${isRole ? `/${user.role}` : ""}`}`);
                 localStorage.clear();
                 dispatch(setUser({}));
-                dispatch(setRole("customer"));
+                dispatch(setRole("none"));
               }}
             >
               <i.LogOut />

@@ -1055,9 +1055,10 @@ export const CheckBoxIcon = ({
   checked = false,
   register = {},
   required = false,
+  onClick = () => {}
 }) => {
   return (
-    <Checkbox>
+    <Checkbox onClick={onClick}>
       <input
         type={type}
         {...register(name, { required: required })}

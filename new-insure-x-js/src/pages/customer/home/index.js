@@ -46,7 +46,6 @@ function HomePage() {
     setIsLoading(true);
     getRequest(`/insurance-case/?insured_person_id=${Person?.id}`)
       .then(({ message }) => {
-        console.log(message, "message");
         setCaseData(
           message?.insurance_cases
             ?.filter((status) => !status.delete)
@@ -56,6 +55,7 @@ function HomePage() {
         console.clear();
       })
       .catch((err) => {
+        console.clear();
         console.log(err);
         setCaseData([]);
         setIsLoading(false);
@@ -74,7 +74,6 @@ function HomePage() {
     setIsHelpModal(2);
     reset();
   };
-  console.log(Person?.id);
   return (
     <HomeContainer className="flex__column__ h-100">
       <div style={{ position: "relative", zIndex: "2" }}>
@@ -86,7 +85,7 @@ function HomePage() {
         <>
           <Button
             style={{ margin: "0 auto" }}
-            onClick={() => navigate("/customer/report")}
+            onClick={() => navigate("/report")}
           >
             פתח אירוע
           </Button>
@@ -105,7 +104,7 @@ function HomePage() {
               </button>
             )}
             <div style={{ display: "flex", direction: "ltr" }}>
-              {caseData.map((data, i) => {
+              {caseData?.map((data, i) => {
                 return (
                   <React.Fragment key={i}>
                     {isActive === i && (
@@ -115,14 +114,13 @@ function HomePage() {
                             className="client_title"
                             style={{ background: "none", border: "none" }}
                             onClick={() => {
-                              if (data.status_id < 3) {
-                                navigate(
-                                  `/customer/${CaseTypeExtract(data)?.link}#${
-                                    data?.id
-                                  }`
-                                );
+                              alert(data.status_id);
+                              if (data.status_id >= 3) {
+                                navigate(`/status#${data?.id}`);
                               } else {
-                                navigate(`/customer/status#${data?.id}`);
+                                navigate(
+                                  `/${CaseTypeExtract(data)?.link}#${data?.id}`
+                                );
                               }
                             }}
                           >
@@ -160,7 +158,7 @@ function HomePage() {
           <div className={`client_body`}>
             <button
               className="client_title"
-              onClick={() => navigate("/customer/report", { replace: true })}
+              onClick={() => navigate("/report", { replace: true })}
             >
               <p>פתח</p>
               <p>אירוע</p>

@@ -32,6 +32,7 @@ export const SelectComponent = ({
       onChange={(e) => setRselect(e.value)}
       isClearable={isClearable}
       value={setValue}
+      menuPosition={"fixed"}
     />
   ) : (
     <s.Select
@@ -43,6 +44,7 @@ export const SelectComponent = ({
       placeholder={placeholder}
       onChange={(e) => setRselect(e.value)}
       isClearable={isClearable}
+      menuPosition={"fixed"}
     />
   );
 };

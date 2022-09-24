@@ -2,13 +2,13 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { RootRoutes } from "./routes";
-import Login from "./pages/customer/login/login";
 import { setUser } from "./redux/reducer/user";
+import NotFoundPage from "./components/Ui/NotFound";
 
 function App() {
   const dispatch = useDispatch();
   const userStorage = useSelector(({ user }) => user);
-  const user =
+  let user =
     userStorage.role === "customer"
       ? JSON.parse(localStorage.getItem("insured_person") ?? "{}")
       : userStorage.role === "agent"
@@ -19,18 +19,24 @@ function App() {
       ? JSON.parse(localStorage.getItem("appraiser") ?? "{}")
       : {};
 
-  React.useEffect(() => {
-    if (user?.id && !userStorage?.user?.id) {
-      dispatch(setUser(user));
-    }
+  React.useInsertionEffect(() => {
+    const cleanUp = () => {
+      if (user?.id && !userStorage?.user?.id) {
+        console.log(user);
+        delete user.sign_picture;
+        dispatch(setUser(user));
+        console.clear();
+      }
+    };
+    return cleanUp();
   }, [user?.id, userStorage?.user?.id]);
 
   return (
     <Routes>
-      {RootRoutes[userStorage.role].map(({ path, element }, index) => (
+      {RootRoutes[userStorage?.role].map(({ path, element }, index) => (
         <Route key={index} path={path} element={element} />
       ))}
-      <Route path={"/auth/login/customer"} element={<Login />} />
+      <Route path={"*"} element={<NotFoundPage role={userStorage?.role} user={userStorage?.user?.id} />} />
     </Routes>
   );
 }

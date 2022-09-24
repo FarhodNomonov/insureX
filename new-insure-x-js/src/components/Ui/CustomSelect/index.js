@@ -1,7 +1,8 @@
-import { WrapperInput } from "components/Ui/FormElements/Styles";
 import { Controller } from "react-hook-form";
-import * as s from "../FormElements/Styles";
 import Select from "react-select";
+import { WrapperInput } from "../../../components/Ui/FormElements/Styles";
+import * as s from "../FormElements/Styles";
+
 
 function CustomSelect({
   name = "",
@@ -44,6 +45,7 @@ function CustomSelect({
             options={options ?? []}
             defaultValue={defaultValue}
             isMulti={isMulti}
+            menuPosition={'fixed'}
           />
         )}
       />

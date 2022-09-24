@@ -10,7 +10,7 @@ export const userSlice = createSlice({
       localStorage.getItem("role")
     )
       ? localStorage.getItem("role")
-      : "customer",
+      : 'none',
   },
   reducers: {
     setUser: (state, { payload }) => {

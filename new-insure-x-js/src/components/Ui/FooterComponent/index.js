@@ -3,7 +3,7 @@ import io from "socket.io-client";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 // import {
-  //  toast,
+//  toast,
 //   useToasterStore,
 // } from "react-hot-toast";
 import { Email, List, Localition, Home } from "../../../components/icon";
@@ -101,22 +101,22 @@ function Footer({ links = [] }) {
   const footerLinks = [
     {
       title: "ראשי",
-      link: "/customer",
+      link: "/",
       icon: <Home />,
     },
     {
       title: "דואר",
-      link: "/customer/messages",
+      link: "/messages",
       icon: <Email message={isReadMessage} />,
     },
     {
       title: "סטאטוס",
-      link: "/customer/status",
+      link: "/status",
       icon: <Localition />,
     },
     {
       title: "ארכיון",
-      link: "/customer/my-docs",
+      link: "/events",
       icon: <List />,
     },
   ];

@@ -5,6 +5,7 @@ import {
   getFormData,
   postRequest,
   patchRequest,
+  getRequest,
 } from "../../../utils/requestApi";
 import * as ic from "../../../components/icon";
 import { AccordStyled } from "./style";
@@ -12,7 +13,7 @@ import Loader from "../Loading/loader";
 import { Message, messageCar, messageOther } from "../../../utils/messages";
 
 function Accord({ linkGlobal = "/customer" }) {
-  const GlobalState = useSelector((st) => st);
+  const personData = useSelector(({ user }) => user?.user);
   const navigate = useNavigate();
   const [isActive, setIsActive] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -159,7 +160,7 @@ function Accord({ linkGlobal = "/customer" }) {
       ],
     },
   ];
-  let personData = JSON.parse(localStorage.getItem("insured_person")) ?? {};
+
   let accident = JSON.parse(localStorage.getItem("accident"));
   let carBurglary = JSON.parse(localStorage.getItem("car_burglary"));
   let theftCar = JSON.parse(localStorage.getItem("theft_car"));
@@ -177,8 +178,25 @@ function Accord({ linkGlobal = "/customer" }) {
   );
   let otherHome = JSON.parse(localStorage.getItem("OtherHome"));
   let otherOffice = JSON.parse(localStorage.getItem("OtherOffice"));
-  const handleClick = React.useCallback(({ link, protoId, eventId, type }) => {
-    setIsLoading(true);
+
+  const [agent, setAgent] = React.useState({});
+  const [appraiserCmp, setAppraiserCmp] = React.useState([]);
+  React.useInsertionEffect(() => {
+    if (!personData?.agent_id || !personData?.region_id) return;
+    getRequest("/agents/select?id=" + personData?.agent_id).then(
+      ({ message }) => {
+        setAgent(message?.agents[0] ?? {});
+      }
+    );
+    getRequest(
+      "/appraisal-companies?delete=false&&region_id=" + personData?.region_id
+    ).then(({ message }) => {
+      setAppraiserCmp(message?.appraisal_companies ?? []);
+    });
+  }, [personData.agent_id, personData?.region_id]);
+
+  const handleClick = ({ link, protoId, eventId, type }) => {
+    // setIsLoading(true);
     if (!link || !personData?.id) return alert("Error Person id");
     let case_type = type;
     const data = {
@@ -190,10 +208,16 @@ function Accord({ linkGlobal = "/customer" }) {
     };
 
     const randomAppraiserComp = (data, iscar = false) => {
-      let RandomComp =
-        GlobalState?.appraiserCmp[
-          Math.floor(Math.random() * GlobalState?.appraiserCmp?.length)
-        ];
+      let RandomComp = appraiserCmp?.filter(
+        (acmp) => acmp.region_id === personData?.region_id
+      )[
+        Math.floor(
+          Math.random() *
+            appraiserCmp?.filter(
+              (acmp) => acmp.region_id === personData?.region_id
+            )?.length
+        )
+      ];
       if (!data?.insured_event?.id || !RandomComp) return null;
 
       patchRequest(
@@ -220,15 +244,11 @@ function Accord({ linkGlobal = "/customer" }) {
             ms_agent_text: iscar
               ? Message.msAgent40(
                   RandomComp?.appraisal_company_name,
-                  GlobalState?.agents?.find(
-                    (ag) => Number(ag.id) === Number(personData?.agent_id)
-                  )?.first_name
+                  agent?.first_name
                 )
               : Message.msAgent41(
                   RandomComp?.appraisal_company_name,
-                  GlobalState?.agents?.find(
-                    (ag) => Number(ag.id) === Number(personData?.agent_id)
-                  )?.first_name
+                  agent?.first_name
                 ),
             agent_id: personData?.agent_id,
             is_case_id: data?.id,
@@ -619,7 +639,7 @@ function Accord({ linkGlobal = "/customer" }) {
         navigate(link);
       }
     }
-  });
+  };
 
   return (
     <AccordStyled>

@@ -1,5 +1,6 @@
 import axios from "axios";
 import toast from "react-hot-toast";
+import { allCities } from "./static";
 
 export const _URL = "https://api.insurextest.link/api"; // https://api.insurextest.link/api
 
@@ -291,11 +292,7 @@ export const CaseTypeExtract = (data) => {
 };
 
 export const CityCache = () => {
-  let data = localStorage.getItem("city")
-    ? JSON.parse(localStorage.getItem("city"))
-    : [];
-
-  let customData = data?.map((item) => {
+  let customData = allCities?.map((item) => {
     return {
       value: item.id,
       label: item.city_name,

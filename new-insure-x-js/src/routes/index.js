@@ -1,15 +1,37 @@
 import Home from "../pages/customer/home";
 import ReportPage from "../pages/customer/report";
+import SignInCustomer from "../pages/customer/register";
+import LoginCustomer from "../pages/customer/login";
+import LoginAppraiser from "../pages/appraiser/login";
+import MessagesCustomer from "../pages/customer/messages";
+import StatusCustomer from "../pages/customer/status";
+// import EventsCustomer from "../pages/customer/events";
 
 const CustomerRoutes = [
   {
-    path: "/customer",
+    path: "/",
     element: <Home />,
   },
   {
-    path: "/customer/report",
+    path: "/report",
     element: <ReportPage />,
   },
+  {
+    path: "/messages",
+    element: <MessagesCustomer />,
+  },
+  {
+    path: "/status",
+    element: <StatusCustomer />,
+  },
+  // {
+  //   path: "/events",
+  //   element: <EventsCustomer />,
+  // },
+  // {
+  //   path: "/events/:id",
+  //   element: <EventsCustomer />,
+  // },
 ];
 
 const AgentRoutes = [
@@ -45,9 +67,25 @@ const AppraiserRoutes = [
   },
 ];
 
+const AuthRoutes = [
+  {
+    path: "/login",
+    element: <LoginCustomer />,
+  },
+  {
+    path: "/sign-in",
+    element: <SignInCustomer />,
+  },
+  {
+    path: "/login/appraiser",
+    element: <LoginAppraiser />,
+  },
+];
+
 export const RootRoutes = {
   agent: AgentRoutes,
   customer: CustomerRoutes,
   sdp: SdpRoutes,
   appraiser: AppraiserRoutes,
+  none: AuthRoutes,
 };
