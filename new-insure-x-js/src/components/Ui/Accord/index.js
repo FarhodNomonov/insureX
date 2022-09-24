@@ -1,12 +1,15 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getFormData, postRequest } from "utils/requestsApi";
-import { Car, Works, HomeBtn, AccordArrowIcon } from "components/Icons";
-import { AccordStyled } from "./accord.style";
+import {
+  getFormData,
+  postRequest,
+  patchRequest,
+} from "../../../utils/requestApi";
+import * as ic from "../../../components/icon";
+import { AccordStyled } from "./style";
 import Loader from "../Loading/loader";
-import { Message, messageCar, messageOther } from "utils/messages";
-import { patchRequest } from "utils/requestsApi";
+import { Message, messageCar, messageOther } from "../../../utils/messages";
 
 function Accord({ linkGlobal = "/customer" }) {
   const GlobalState = useSelector((st) => st);
@@ -17,7 +20,7 @@ function Accord({ linkGlobal = "/customer" }) {
     {
       id: 1,
       title: "רכב",
-      svg: <Car />,
+      svg: <ic.Car />,
       child: [
         {
           id: 1,
@@ -48,7 +51,7 @@ function Accord({ linkGlobal = "/customer" }) {
     {
       id: 2,
       title: "עסק",
-      svg: <Works />,
+      svg: <ic.Works />,
       child: [
         {
           id: 1,
@@ -103,7 +106,7 @@ function Accord({ linkGlobal = "/customer" }) {
     {
       id: 3,
       title: "דירה",
-      svg: <HomeBtn />,
+      svg: <ic.HomeBtn />,
       child: [
         {
           id: 1,
@@ -645,7 +648,7 @@ function Accord({ linkGlobal = "/customer" }) {
                   key={_item?.title}
                   onClick={() => handleClick(_item)}
                 >
-                  <AccordArrowIcon />
+                  <ic.AccordArrowIcon />
                   <div className="accord_body_item">
                     <div className="accord_body_item__title">
                       <h3>{_item?.title}</h3>

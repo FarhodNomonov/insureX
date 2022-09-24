@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, NavLink } from "react-router-dom";
 import { setRole, setUser } from "../../../redux/reducer/user";
 import * as i from "../../icon";
-import { HeaderStyled } from "./header.style";
+import { HeaderStyled } from "./style";
 
 function Header({
   text = "שלום!",

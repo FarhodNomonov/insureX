@@ -41,24 +41,25 @@ function HomePage() {
   const [isHelpModal, setIsHelpModal] = React.useState(0);
   const Person = useSelector(({ user }) => user?.user);
 
-  React.useEffect(() => {
-    if (Person?.id) {
-      setIsLoading(true);
-      getRequest(`/insurance-case/?insured_person_id=${Person?.id}`)
-        .then((res) => {
-          setCaseData(
-            res?.message?.insurance_cases
-              ?.filter((status) => !status.delete)
-              ?.sort((a, b) => b.id - a.id)
-          );
-          setIsLoading(false);
-        })
-        .catch((err) => {
-          console.log(err);
-          setCaseData([]);
-          setIsLoading(false);
-        });
-    }
+  React.useInsertionEffect(() => {
+    if (!Person?.id) return;
+    setIsLoading(true);
+    getRequest(`/insurance-case/?insured_person_id=${Person?.id}`)
+      .then(({ message }) => {
+        console.log(message, "message");
+        setCaseData(
+          message?.insurance_cases
+            ?.filter((status) => !status.delete)
+            ?.sort((a, b) => b.id - a.id)
+        );
+        setIsLoading(false);
+        console.clear();
+      })
+      .catch((err) => {
+        console.log(err);
+        setCaseData([]);
+        setIsLoading(false);
+      });
   }, [Person?.id]);
 
   const {
@@ -73,7 +74,7 @@ function HomePage() {
     setIsHelpModal(2);
     reset();
   };
-
+  console.log(Person?.id);
   return (
     <HomeContainer className="flex__column__ h-100">
       <div style={{ position: "relative", zIndex: "2" }}>

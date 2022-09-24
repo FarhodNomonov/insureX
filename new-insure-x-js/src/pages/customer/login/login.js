@@ -63,6 +63,7 @@ const Login = () => {
       .catch((err) => {
         console.log(err);
         setIsLoading(false);
+        errorMessage("שם משתמש או סיסמה שגויים");
       });
   };
 

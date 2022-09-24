@@ -8,7 +8,7 @@ import {
   ModalHeader,
   ModalHeaderIconWrapper,
   ModalHeaderTitle,
-} from "pages/spec/RegisterForm/Styles";
+} from "../../../pages/";
 import Button from "components/Ui/Button/Button";
 import {
   patchRequest,
@@ -17,7 +17,7 @@ import {
   typeCase,
 } from "utils/requestsApi";
 import Loader from "../Loading/loader";
-import { CalendarAppreiser } from "components/Icons";
+import { CalendarAppreiser } from "../../../components/icon";
 import { toast } from "react-hot-toast";
 import { Message } from "utils/messages";
 

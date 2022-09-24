@@ -390,12 +390,9 @@ export const StatusName = (item) => {
     ?.title;
 };
 
-export const successMessage = (message) => {
-  toast.success(message);
-};
-export const errorMessage = (message) => {
-  toast.error(message);
-};
+export const successMessage = (message) => toast.success(message);
+
+export const errorMessage = (message) => toast.error(message);
 
 export const makeid = (length) => {
   let result = "";

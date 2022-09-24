@@ -1,4 +1,5 @@
 import Home from "../pages/customer/home";
+import ReportPage from "../pages/customer/report";
 
 const CustomerRoutes = [
   {
@@ -6,8 +7,8 @@ const CustomerRoutes = [
     element: <Home />,
   },
   {
-    path: "/report",
-    element: <>REPORT PAGE</>,
+    path: "/customer/report",
+    element: <ReportPage />,
   },
 ];
 

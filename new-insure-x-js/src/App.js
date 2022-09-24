@@ -8,8 +8,6 @@ import { setUser } from "./redux/reducer/user";
 function App() {
   const dispatch = useDispatch();
   const userStorage = useSelector(({ user }) => user);
-  console.log(RootRoutes[userStorage.role], userStorage.role);
-
   const user =
     userStorage.role === "customer"
       ? JSON.parse(localStorage.getItem("insured_person") ?? "{}")
