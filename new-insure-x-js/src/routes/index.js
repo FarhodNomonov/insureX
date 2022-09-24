@@ -5,7 +5,8 @@ import LoginCustomer from "../pages/customer/login";
 import LoginAppraiser from "../pages/appraiser/login";
 import MessagesCustomer from "../pages/customer/messages";
 import StatusCustomer from "../pages/customer/status";
-// import EventsCustomer from "../pages/customer/events";
+import EventsCustomer from "../pages/customer/events";
+import EventDocsCustomer from "../pages/customer/event-docs";
 
 const CustomerRoutes = [
   {
@@ -24,14 +25,18 @@ const CustomerRoutes = [
     path: "/status",
     element: <StatusCustomer />,
   },
-  // {
-  //   path: "/events",
-  //   element: <EventsCustomer />,
-  // },
-  // {
-  //   path: "/events/:id",
-  //   element: <EventsCustomer />,
-  // },
+  {
+    path: "/events",
+    element: <EventsCustomer />,
+  },
+  {
+    path: "/events/:id",
+    element: <EventsCustomer />,
+  },
+  {
+    path: "/event-docs/:id",
+    element: <EventDocsCustomer />,
+  },
 ];
 
 const AgentRoutes = [
