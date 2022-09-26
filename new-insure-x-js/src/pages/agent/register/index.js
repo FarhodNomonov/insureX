@@ -1,6 +1,5 @@
 import React from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { Input } from "../../../components/Ui/FormElements/Styles";
 import StartLayout from "../../../components/Ui/StartLayout/StartLayout";
@@ -8,9 +7,14 @@ import Headline from "../../../components/Ui/Headline/Headline";
 import Button from "../../../components/Ui/Button/Button";
 import ModalIcon from "../../../assets/img/modalIcon.svg";
 import {
-  FormLayout,
-  SelectComponent,
-} from "../../../components/Ui/FormElements/FormElements";
+  errorMessage,
+  getFormData,
+  getRequest,
+  postRequest,
+  postSignInAgent,
+  successMessage,
+} from "../../../utils/requestApi";
+import { FormLayout } from "../../../components/Ui/FormElements/FormElements";
 import {
   WrapperInput,
   Modal,
@@ -20,36 +24,43 @@ import {
   ModalHeaderTitle,
   ModalBody,
   CloseButton,
-} from "./style";
-import {
-  errorMessage,
-  getFormData,
-  postRequest,
-  postSignInCustomer,
-  successMessage,
-  getRequest,
-} from "../../../utils/requestApi";
-import CustomSelect from "../../../components/Ui/CustomSelect";
-import Loader from "../../../components/Ui/Loading/loader";
-import {
-  SelectCheckbox,
-  SelectCheckboxBody,
-  SelectCheckboxContainer,
   SelectCheckboxWrapper,
-} from "../../sdp/register/style";
+  SelectCheckboxContainer,
+  SelectCheckboxBody,
+  SelectCheckbox,
+} from "./style";
 import { CheckBoxIcon, SelectArrow } from "../../../components/icon";
-import { setRole, setUser } from "../../../redux/reducer/user";
-import { CityCache } from "./../../../utils/requestApi";
+import Loader from "../../../components/Ui/Loading/loader";
+import CustomSelect from "../../../components/Ui/CustomSelect";
 
 const SignIn = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [company, setCompany] = React.useState([]);
-  const [agentData, setAgentData] = React.useState([]);
-  const [region, setRegion] = React.useState();
+
   const [succes, setSucces] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
-  const [modalSelect, setModalSelect] = React.useState(false);
+  const [regionData, setRegionData] = React.useState([]);
+
+  React.useInsertionEffect(() => {
+    getRequest("/insurance-companies").then(({ message }) => {
+      const dataSelect = message?.insurance_companies?.map((item) => {
+        return {
+          value: item?.id,
+          label: item?.title,
+        };
+      });
+      setCompany(dataSelect);
+    });
+    getRequest("/regions").then(({ message }) => {
+      const dataSelect = message?.regions?.map((item) => {
+        return {
+          value: item?.id,
+          label: item?.region_name,
+        };
+      });
+      setRegionData(dataSelect);
+    });
+  }, []);
 
   const {
     register,
@@ -59,15 +70,28 @@ const SignIn = () => {
     formState: { errors },
   } = useForm();
 
+  const [modalSelect, setModalSelect] = React.useState(errors?.insurance_company_ids ? true : false);
+
+  React.useEffect(() => {
+    setModalSelect(errors?.insurance_company_ids ? true : false)
+    return () =>
+      document.removeEventListener(
+        "click",
+        window.addEventListener("click", () => setModalSelect(false))
+      );
+  }, [errors?.insurance_company_ids]);
+
+
+
   const SendMessage = (data = {}) => {
     if (!data?.id) return;
     let formData = {
-      admin_type: "insurance_company",
+      admin_type: "insurance_companies",
       user_name: data?.first_name,
       user_id: data?.id,
-      user_type: "persons",
+      user_type: "agent",
       id: Math.floor(Math.random() * 10000),
-      insurance_company_id: data?.insurance_company_id,
+      insurance_company_ids: data?.insurance_company_ids,
       date_time: new Date(),
     };
     postRequest("/insurance-case/messages/create", getFormData(formData));
@@ -75,74 +99,34 @@ const SignIn = () => {
 
   const onSubmit = (data) => {
     setIsLoading(true);
-    if (region) {
-      data.insurance_company_id = data.insurance_company_persons_id[0];
-      data.insurance_company_persons_id = `{${data.insurance_company_persons_id}}`;
-      data.agent_id = data?.agent_id?.value ?? "";
-      data.city_id = region ?? "";
-      data.role = "insured_person";
-      postSignInCustomer(getFormData(data)).then((__res) => {
-        if (__res?.message?.token) {
-          SendMessage(__res?.message?.insured_person);
-          setIsLoading(false);
+    data.region_id = data?.region_id?.value;
+    data.insurance_company_ids = `{${data.insurance_company_ids}}`;
+    postSignInAgent(getFormData(data), setSucces, setIsLoading)
+      .then((data) => {
+        SendMessage(data?.message?.agent);
+        if (data.message.token) {
+          reset();
           setSucces(true);
-          localStorage.setItem("token", __res?.message?.token);
-          dispatch(setUser(__res?.message?.insured_person));
-          localStorage.setItem(
-            "insured_person",
-            JSON.stringify(__res?.message?.insured_person)
-          );
           successMessage("בהצלחה!");
-        } else {
           setIsLoading(false);
-          localStorage.removeItem("token");
-          localStorage.removeItem("user");
-          localStorage.removeItem("insured_person");
+          console.clear();
+        }
+        if (!data?.message?.token) {
+          setIsLoading(false);
           errorMessage("שם משתמש או סיסמה שגויים");
         }
+      })
+      .catch(() => {
+        setIsLoading(false);
+        errorMessage("שם משתמש או סיסמה שגויים");
       });
-      if (succes) {
-        reset();
-      }
-    } else {
-      setIsLoading(false);
-    }
   };
 
-  React.useEffect(() => {
-    setModalSelect(errors?.insurance_company_persons_id);
-    return () =>
-      document.removeEventListener(
-        "click",
-        window.addEventListener("click", () => setModalSelect(false))
-      );
-  }, [errors?.insurance_company_persons_id]);
-
-  React.useInsertionEffect(() => {
-    getRequest("/insurance-companies").then(({ message }) => {
-      const customOptions = message?.insurance_companies
-        ?.filter((s) => !s.delete)
-        ?.map((item) => ({
-          value: item.id,
-          label: item.title,
-        }));
-      setCompany(customOptions ?? []);
-    });
-    getRequest("/agents/select").then(({ message }) => {
-      const customOptions = message?.agents
-        ?.filter((s) => !s.delete)
-        ?.map((item) => ({
-          value: item.id,
-          label: item.first_name,
-        }));
-      setAgentData(customOptions ?? []);
-    });
-  }, []);
   return (
-    <StartLayout style={isLoading ? { opacity: "0.3" } : {}}>
+    <StartLayout bigText="סוכן" textBg="#561D57">
       {isLoading && <Loader />}
       {succes && (
-        <Modal>
+        <Modal style={{ display: "flex" }}>
           <ModalContent>
             <ModalHeader>
               <ModalHeaderIconWrapper>
@@ -150,15 +134,13 @@ const SignIn = () => {
                 <ModalHeaderTitle>הפרטים נקלטו</ModalHeaderTitle>
               </ModalHeaderIconWrapper>
             </ModalHeader>
-            <ModalBody>הפרטים נקלטו במערכת וההרשמה בוצעה בהצלחה!</ModalBody>
+            <ModalBody>
+              הפרטים נקלטו <br />
+              במערכת וההרשמה <br />
+              ממתינה לאישור
+            </ModalBody>
             <div style={{ marginBottom: "30px" }}>
-              <div
-                onClick={() => {
-                  navigate("/");
-                  localStorage.setItem("role", "customer");
-                  dispatch(setRole("customer"));
-                }}
-              >
+              <div onClick={() => navigate("/login/agent", { replace: true })}>
                 <Button>
                   <CloseButton>{"סגור"}</CloseButton>
                 </Button>
@@ -178,32 +160,30 @@ const SignIn = () => {
                   e.stopPropagation();
                   setModalSelect(!modalSelect);
                 }}
-                style={modalSelect ? { zIndex: 25 } : {}}
               >
-                <SelectCheckbox style={modalSelect ? { zIndex: 25 } : {}}>
-                  <p
-                    style={
-                      errors.insurance_company_persons_id
-                        ? { color: "red" }
-                        : {}
-                    }
-                  >
-                    חברת ביטוח
-                  </p>
+                <SelectCheckbox>
+                  <p>בחר חברת ביטוח.</p>
                   <SelectArrow open={modalSelect} />
                 </SelectCheckbox>
               </div>
               <SelectCheckboxContainer
-                style={modalSelect ? { display: "flex" } : { display: "none" }}
+                style={
+                  modalSelect
+                    ? { display: "flex" }
+                    : {
+                        display: "none",
+                      }
+                }
               >
                 <SelectCheckboxBody>
+                  {company.length === 0 && "No data"}
                   {company.length > 0 &&
                     company.map((item) => {
                       return (
                         <SelectCheckboxWrapper key={item.value}>
                           <div className="select_checkbox_custom__add">
                             <CheckBoxIcon
-                              name="insurance_company_persons_id"
+                              name="insurance_company_ids"
                               type="checkbox"
                               label={item?.label}
                               checked={false}
@@ -229,7 +209,7 @@ const SignIn = () => {
                 {...register("first_name", { required: true })}
                 as="input"
                 type="text"
-                placeholder={"שם פרטי*"}
+                placeholder={"שם הסוכן*"}
               />
             </WrapperInput>
             <WrapperInput>
@@ -238,7 +218,7 @@ const SignIn = () => {
                 {...register("second_name", { required: true })}
                 as="input"
                 type="text"
-                placeholder={`שם משפחה*`}
+                placeholder={"שם משפחה*"}
               />
             </WrapperInput>
             <WrapperInput>
@@ -247,7 +227,7 @@ const SignIn = () => {
                 {...register("passport_id", { required: true })}
                 as="input"
                 type="text"
-                placeholder={`מספר ת"ז*`}
+                placeholder={"מספר סוכן*"}
               />
             </WrapperInput>
             <WrapperInput>
@@ -255,28 +235,10 @@ const SignIn = () => {
                 style={errors.phone && { border: "1px solid red" }}
                 {...register("phone", { required: true })}
                 as="input"
-                type="number"
+                type="tel"
                 placeholder={"טלפון נייד*"}
               />
             </WrapperInput>
-
-            <WrapperInput>
-              <Input
-                style={errors.address && { border: "1px solid red" }}
-                {...register("address", { required: true })}
-                as="input"
-                type="text"
-                placeholder={"רחוב ומספר*"}
-              />
-            </WrapperInput>
-            <WrapperInput>
-              <SelectComponent
-                value={CityCache() ?? []}
-                placeholder={"עיר"}
-                setRselect={setRegion}
-              />
-            </WrapperInput>
-
             <WrapperInput>
               <Input
                 style={errors.email && { border: "1px solid red" }}
@@ -286,18 +248,37 @@ const SignIn = () => {
                 placeholder={"דואר אלקטרוני*"}
               />
             </WrapperInput>
+            <WrapperInput>
+              <Input
+                style={errors.address && { border: "1px solid red" }}
+                {...register("address", { required: true })}
+                as="input"
+                type="text"
+                placeholder={"כתובת"}
+              />
+            </WrapperInput>
+
             <CustomSelect
-              style={errors.agent_id && { border: "1px solid red" }}
+              styles={errors.region_id && { border: "1px solid red" }}
+              placeholder={"מזהה אזור"}
               rules={{ required: true }}
-              name={`agent_id`}
               control={control}
-              placeholder={"בחירת סוכן - הקלד שם*"}
-              options={agentData ?? []}
+              name="region_id"
+              options={regionData ?? []}
             />
+            <WrapperInput>
+              <Input
+                style={errors.employee_number && { border: "1px solid red" }}
+                {...register("employee_number", { required: true })}
+                as="input"
+                type="number"
+                placeholder={"מספר מעסיקים"}
+              />
+            </WrapperInput>
             <Button>{"הרשם"}</Button>
           </form>
-          <Link to="/login">
-            <Button variant="ghost">{"להירשם מאוחר יותר"}</Button>
+          <Link to="/login/agent">
+            <Button variant="ghost">{"המשרה"}</Button>
           </Link>
         </FormLayout>
       </div>

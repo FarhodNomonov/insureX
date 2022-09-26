@@ -78,7 +78,7 @@ export const AccordStyled = styled.div`
         opacity: 1;
         pointer-events: all;
         margin-top: 20px;
-        height: auto;
+        height: 60px;
         padding: 5px 20px;
         border-width: 2px;
       }

@@ -24,7 +24,6 @@ function App() {
   React.useInsertionEffect(() => {
     const cleanUp = () => {
       if (user?.id && !userStorage?.user?.id) {
-        console.log(user);
         delete user.sign_picture;
         dispatch(setUser(user));
         console.clear();
@@ -56,7 +55,7 @@ function App() {
         }
       }
     });
-  }, [userStorage.role, userStorage?.user?.id]);
+  }, [userStorage.role, userStorage?.user?.id, dispatch]);
 
   return (
     <Routes>

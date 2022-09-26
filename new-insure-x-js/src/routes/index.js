@@ -3,6 +3,8 @@ import ReportPage from "../pages/customer/report";
 import SignInCustomer from "../pages/customer/register";
 import LoginCustomer from "../pages/customer/login";
 import LoginAppraiser from "../pages/appraiser/login";
+import SignInAgent from "../pages/agent/register";
+import LoginAgent from "../pages/agent/login";
 import MessagesCustomer from "../pages/customer/messages";
 import StatusCustomer from "../pages/customer/status";
 import EventsCustomer from "../pages/customer/events";
@@ -84,6 +86,14 @@ const AuthRoutes = [
   {
     path: "/login/appraiser",
     element: <LoginAppraiser />,
+  },
+  {
+    path: "/login/agent",
+    element: <LoginAgent />,
+  },
+  {
+    path: "/sign-in/agent",
+    element: <SignInAgent />,
   },
 ];
 

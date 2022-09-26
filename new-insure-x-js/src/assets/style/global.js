@@ -25,6 +25,7 @@ ${reset}
   background: #9eb4c1;
 
   &-thumb {
+    background: hsl(215.2,50%,22.7%);
   }
 }
 

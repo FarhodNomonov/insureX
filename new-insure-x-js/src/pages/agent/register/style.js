@@ -81,7 +81,7 @@ export const SelectCheckboxContainer = styled.div`
   justify-content: center;
   align-items: center;
   position: relative;
-  z-index: 20;
+  z-index: 22;
   user-select: none;
 `;
 
@@ -123,18 +123,21 @@ export const SelectCheckboxWrapper = styled.div`
       font-size: 18px;
       color: #1d3557;
       max-width: 80%;
-      text-align: right;
     }
   }
 `;
 
-export const Overlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1000;
+export const FlexWrapper = styled.div`
+  label {
+    display: flex;
+    gap: 10px;
+
+    p {
+      font-size: 18px;
+      color: #1d3557;
+      font-weight: bold;
+    }
+  }
 `;
 
 export const SelectCheckbox = styled.div`
@@ -143,8 +146,9 @@ export const SelectCheckbox = styled.div`
   box-sizing: border-box;
   border-radius: 8px;
   padding: 15px 21px;
-  // z-index: 23;
+  z-index: 23;
   position: relative;
+  pointer-events: none;
   width: 100%;
   height: 100%;
   display: flex;
