@@ -35,7 +35,7 @@ function Events() {
         setCaseData([]);
         setIsLoading(false);
       });
-      console.clear();
+      console.log("cleared");
   }, [id, Person?.id]);
 
   return (

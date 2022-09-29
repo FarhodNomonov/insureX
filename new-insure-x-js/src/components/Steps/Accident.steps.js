@@ -1,6 +1,5 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 import UseCamera from "../../hook/useCamera";
 import CustomSelect from "../../components/Ui/CustomSelect";
 import { WrapperInput, Input } from "../../components/Ui/FormElements/Styles";
@@ -177,7 +176,7 @@ export const FirstStep = ({
           <WrapperInput>
             <Input
               style={errors.username && { border: "1px solid red" }}
-              {...register("username", { required: true })}
+              {...register("username")}
               as="input"
               type="text"
               defaultValue={
@@ -193,7 +192,7 @@ export const FirstStep = ({
           <WrapperInput>
             <Input
               style={errors.passport_id && { border: "1px solid red" }}
-              {...register("passport_id", { required: true })}
+              {...register("passport_id")}
               as="input"
               type="text"
               defaultValue={personData?.passport_id ?? ""}
@@ -203,7 +202,7 @@ export const FirstStep = ({
           <WrapperInput>
             <Input
               style={errors.address && { border: "1px solid red" }}
-              {...register("address", { required: true })}
+              {...register("address")}
               as="input"
               type="text"
               defaultValue={personData?.address ?? ""}
@@ -221,7 +220,7 @@ export const FirstStep = ({
           <WrapperInput>
             <Input
               style={errors.phone && { border: "1px solid red" }}
-              {...register("phone", { required: true })}
+              {...register("phone")}
               as="input"
               type="text"
               defaultValue={personData?.phone ?? ""}
@@ -231,7 +230,7 @@ export const FirstStep = ({
           <WrapperInput>
             <Input
               style={errors.email && { border: "1px solid red" }}
-              {...register("email", { required: true })}
+              {...register("email")}
               as="input"
               type="text"
               defaultValue={personData?.email ?? ""}
@@ -969,20 +968,26 @@ export const FormBeforeSubmit = ({
     localStorage.removeItem("accident");
     window.location.reload();
   }
-  const GlobalState = useSelector((state) => state);
   const navigate = useNavigate();
   const [insidentCompany, setInsidentCompany] = React.useState(false);
   const [sdpData, setSdpData] = React.useState([]);
+  const [sdpDataFiltered, setSdpDataFiltered] = React.useState([]);
   const [cityId, setCityId] = React.useState(null);
   const [regionId, setRegionId] = React.useState(null);
   const [inputText, setInputText] = React.useState("");
   const [isSdpPhone, setIsSdpPhone] = React.useState(null);
 
-  React.useInsertionEffect(() => {
+  React.useEffect(() => {
+    getRequest("/sdp?delete=false").then(({ message }) => {
+      setSdpDataFiltered(message?.sdp);
+    });
+  }, []);
+
+  React.useEffect(() => {
     if (cityId) {
       if (regionId) {
         setSdpData(
-          GlobalState?.sdp
+          sdpDataFiltered
             ?.filter((fs) => fs.supplier_type_ids?.includes(5))
             ?.filter(
               (resp) => resp.city_id === cityId && resp.region_id === regionId
@@ -990,7 +995,7 @@ export const FormBeforeSubmit = ({
         );
       } else {
         setSdpData(
-          GlobalState?.sdp
+          sdpDataFiltered
             ?.filter((fs) => fs.supplier_type_ids?.includes(5))
             ?.filter((resp) => resp.city_id === cityId)
         );
@@ -999,7 +1004,7 @@ export const FormBeforeSubmit = ({
     if (regionId) {
       if (cityId) {
         setSdpData(
-          GlobalState?.sdp
+          sdpDataFiltered
             ?.filter((fs) => fs.supplier_type_ids?.includes(5))
             ?.filter(
               (resp) => resp.city_id === cityId && resp.region_id === regionId
@@ -1007,16 +1012,16 @@ export const FormBeforeSubmit = ({
         );
       } else {
         setSdpData(
-          GlobalState?.sdp
+          sdpDataFiltered
             ?.filter((fs) => fs.supplier_type_ids?.includes(5))
             ?.filter((resp) => resp.region_id === regionId)
         );
       }
     } else if (!cityId && !regionId)
       setSdpData(
-        GlobalState?.sdp?.filter((fs) => fs.supplier_type_ids?.includes(5))
+        sdpDataFiltered?.filter((fs) => fs.supplier_type_ids?.includes(5))
       );
-  }, [cityId, regionId, GlobalState?.sdp]);
+  }, [cityId, regionId, sdpDataFiltered]);
 
   const filteredData = sdpData?.filter((el) => {
     //if no input the return the original
@@ -1049,6 +1054,16 @@ export const FormBeforeSubmit = ({
   const SdpPatch = (id) => {
     if (IsActiveId && id) {
       setIsLoading(true);
+      let agentData = {};
+      getRequest(
+        `/agetns/select?id=${
+          JSON.parse(localStorage.getItem("accident") ?? "{}")?.report
+            ?.insurance_case?.agent_id
+        }`
+      ).then(
+        ({ messages }) =>
+          (agentData = messages?.agents[0] ? messages.agents[0] : {})
+      );
       patchRequest(`/insurance-case/sdp/${IsActiveId}/${id}`)
         .then((__respons) => {
           if (!__respons.error) {
@@ -1058,7 +1073,7 @@ export const FormBeforeSubmit = ({
               getFormData({
                 type: "web-client",
                 ms_text: Message.msCustomer30(
-                  GlobalState?.sdp?.find((res) => Number(res.id) === Number(id))
+                  sdpDataFiltered?.find((res) => Number(res.id) === Number(id))
                     ?.first_name,
                   IsActiveId,
                   "תאונת דרכים",
@@ -1066,16 +1081,11 @@ export const FormBeforeSubmit = ({
                     ?.first_name
                 ),
                 ms_agent_text: Message.msAgent30(
-                  GlobalState?.sdp?.find((res) => Number(res.id) === Number(id))
+                  sdpDataFiltered?.find((res) => Number(res.id) === Number(id))
                     ?.first_name,
                   IsActiveId,
                   "תאונת דרכים",
-                  GlobalState?.agents?.find(
-                    (res) =>
-                      res.id ===
-                      JSON.parse(localStorage.getItem("accident") ?? "{}")
-                        ?.report?.insurance_case?.agent_id
-                  )?.first_name
+                  agentData?.first_name
                 ),
                 spec_id: id,
                 agent_id: JSON.parse(localStorage.getItem("accident") ?? "{}")

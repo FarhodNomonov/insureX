@@ -26,7 +26,7 @@ function App() {
       if (user?.id && !userStorage?.user?.id) {
         delete user.sign_picture;
         dispatch(setUser(user));
-        console.clear();
+        console.log("cleared");
       }
     };
     return cleanUp();
