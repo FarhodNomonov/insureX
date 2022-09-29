@@ -86,11 +86,6 @@ export const FirstStep = ({
   const watchedValueCompany = watch("insurance_company_id")?.value;
 
   React.useEffect(() => {
-    console.log(
-      company?.filter((fs) => fs.insurance_company_ids),
-      "----",
-      company
-    );
     if (!watchedValueCompany) return setCompanyFiltered(company);
     setCompanyFiltered(
       company?.filter((fs) =>
