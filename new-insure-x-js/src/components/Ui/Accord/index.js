@@ -12,7 +12,7 @@ import { AccordStyled } from "./style";
 import Loader from "../Loading/loader";
 import { Message, messageCar, messageOther } from "../../../utils/messages";
 
-function Accord({ linkGlobal = "/customer" }) {
+function Accord() {
   const personData = useSelector(({ user }) => user?.user);
   const navigate = useNavigate();
   const [isActive, setIsActive] = React.useState(null);
@@ -25,7 +25,7 @@ function Accord({ linkGlobal = "/customer" }) {
       child: [
         {
           id: 1,
-          link: linkGlobal + "/accident",
+          link: "/accident",
           title: "תאונת דרכים",
           protoId: 1,
           eventId: 1,
@@ -33,7 +33,7 @@ function Accord({ linkGlobal = "/customer" }) {
         },
         {
           id: 2,
-          link: linkGlobal + "/carburglary",
+          link: "/carburglary",
           title: "פריצה",
           protoId: 1,
           eventId: 3,
@@ -41,7 +41,7 @@ function Accord({ linkGlobal = "/customer" }) {
         },
         {
           id: 3,
-          link: linkGlobal + "/theftcar",
+          link: "/theftcar",
           title: "גניבה",
           protoId: 1,
           eventId: 5,
@@ -56,7 +56,7 @@ function Accord({ linkGlobal = "/customer" }) {
       child: [
         {
           id: 1,
-          link: linkGlobal + "/water-damage-home",
+          link: "/water-damage-home",
           title: "מים",
           protoId: 2,
           eventId: 2,
@@ -64,7 +64,7 @@ function Accord({ linkGlobal = "/customer" }) {
         },
         {
           id: 2,
-          link: linkGlobal + "/fire-damage-home",
+          link: "/fire-damage-home",
           title: "אש",
           protoId: 2,
           eventId: 4,
@@ -72,7 +72,7 @@ function Accord({ linkGlobal = "/customer" }) {
         },
         {
           id: 3,
-          link: linkGlobal + "/nature-damage-home",
+          link: "/nature-damage-home",
           title: "נזקי טבע",
           protoId: 2,
           eventId: 9,
@@ -80,7 +80,7 @@ function Accord({ linkGlobal = "/customer" }) {
         },
         {
           id: 4,
-          link: linkGlobal + "/burglary-home",
+          link: "/burglary-home",
           title: "פריצה / גניבה",
           protoId: 2,
           eventId: 6,
@@ -88,7 +88,7 @@ function Accord({ linkGlobal = "/customer" }) {
         },
         {
           id: 5,
-          link: linkGlobal + "/person-3d-home",
+          link: "/person-3d-home",
           title: "צד שלישי",
           protoId: 2,
           eventId: 7,
@@ -96,7 +96,7 @@ function Accord({ linkGlobal = "/customer" }) {
         },
         {
           id: 6,
-          link: linkGlobal + "/others-home",
+          link: "/others-home",
           title: "אחר",
           protoId: 2,
           eventId: 8,
@@ -111,7 +111,7 @@ function Accord({ linkGlobal = "/customer" }) {
       child: [
         {
           id: 1,
-          link: linkGlobal + "/water-damage-office",
+          link: "/water-damage-office",
           title: "מים",
           protoId: 3,
           eventId: 2,
@@ -119,7 +119,7 @@ function Accord({ linkGlobal = "/customer" }) {
         },
         {
           id: 2,
-          link: linkGlobal + "/fire-damage-office",
+          link: "/fire-damage-office",
           title: "אש",
           protoId: 3,
           eventId: 4,
@@ -127,7 +127,7 @@ function Accord({ linkGlobal = "/customer" }) {
         },
         {
           id: 3,
-          link: linkGlobal + "/nature-damage-office",
+          link: "/nature-damage-office",
           title: "נזקי טבע",
           protoId: 3,
           eventId: 9,
@@ -135,7 +135,7 @@ function Accord({ linkGlobal = "/customer" }) {
         },
         {
           id: 4,
-          link: linkGlobal + "/burglary-office",
+          link: "/burglary-office",
           title: "פריצה / גניבה",
           protoId: 3,
           eventId: 6,
@@ -143,7 +143,7 @@ function Accord({ linkGlobal = "/customer" }) {
         },
         {
           id: 5,
-          link: linkGlobal + "/person-3d-office",
+          link: "/person-3d-office",
           title: "צד שלישי",
           protoId: 3,
           eventId: 7,
@@ -151,7 +151,7 @@ function Accord({ linkGlobal = "/customer" }) {
         },
         {
           id: 6,
-          link: linkGlobal + "/others-office",
+          link: "/others-office",
           title: "אחר",
           protoId: 3,
           eventId: 8,

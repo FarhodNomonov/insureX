@@ -1,7 +1,6 @@
 import { useRef } from "react";
-import DrawerBg from "assets/img/imzo.png";
-
 import { ReactSketchCanvas } from "react-sketch-canvas";
+import DrawerBg from "../../../assets/img/imzo.png";
 
 function DrawerPodpis({ setImageBg = () => {} }) {
   const canvasEl = useRef(null);
@@ -35,7 +34,6 @@ function DrawerPodpis({ setImageBg = () => {} }) {
             color: "#fff",
             cursor: "pointer",
             height: "40px",
-            
           }}
           onClick={() => {
             canvasEl.current.clearCanvas();

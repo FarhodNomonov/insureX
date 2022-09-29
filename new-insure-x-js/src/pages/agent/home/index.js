@@ -18,6 +18,7 @@ function HomePage() {
   const Agent = useSelector(({ user }) => user?.user);
 
   useInsertionEffect(() => {
+    if (!Agent?.id) return;
     getRequest(`/insurance-case/?agent_id=${Agent?.id}`).then(({ message }) => {
       setEventCount(
         message?.insurance_cases?.filter((_status) => !_status.delete)?.length

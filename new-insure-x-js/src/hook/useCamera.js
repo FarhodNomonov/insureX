@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from "react";
-import { onSavePhoto } from "utils/requestsApi";
+import { onSavePhoto } from "../utils/requestApi";
 import { StyledCameraContainer } from "./camera.styled";
 
 function UseCamera({

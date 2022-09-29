@@ -12,7 +12,7 @@ import {
   patchRequest,
   postRequest,
   RegionCache,
-} from "../../utils/requestsApi";
+} from "../../utils/requestApi";
 import {
   AccordArrowIcon,
   AdderIcon,
@@ -29,15 +29,15 @@ import {
   Modal,
   ModalHeader,
   ModalHeaderTitle,
-} from "../../pages/spec/RegisterForm/Styles";
+} from "../../pages/sdp/register/style";
 import {
   ModalBody,
   ModalContent,
   ModalHeaderIconWrapper,
-} from "../../pages/client/RegisterForm/Styles";
+} from "../../pages/customer/register/style";
 import Button from "../../components/Ui/Button/Button";
 import ModalIcon from "../../assets/img/modalIcon.svg";
-import { SearchWrapper } from "../../pages/client/Message/styles";
+import { SearchWrapper } from "../../pages/customer/messages/style";
 
 import { SelectComponent } from "../../components/Ui/FormElements/FormElements";
 import { Message } from "../../utils/messages";
@@ -50,28 +50,29 @@ export const FirstStep = ({
   personData,
   cityId,
   currentPage,
-  setValue,
   reportStorage,
   insCompData,
+  watch,
 }) => {
   const [company, setCompany] = React.useState([]);
+  const [companyFiltered, setCompanyFiltered] = React.useState([]);
 
-  React.useEffect(() => {
-    if (
-      personData.insurance_company_id !== null &&
-      personData.insurance_company_id !== undefined
-    ) {
-      getRequest(
-        `/agents/select?insurance_company_id=${personData.insurance_company_id}`
-      )
+  React.useInsertionEffect(() => {
+    if (personData?.insurance_company_persons_id) {
+      getRequest(`/agents/select?delete=false`)
         .then((res) => {
           if (!res?.error) {
             const customData = res?.message?.agents
-              ?.filter((_res) => !_res.delete)
+              ?.filter((cp) =>
+                cp?.insurance_company_ids?.map((item) =>
+                  personData?.insurance_company_persons_id?.includes(item)
+                )
+              )
               .map((item) => {
                 return {
                   value: item?.id,
                   label: `${item?.first_name} ${item?.second_name}`,
+                  insurance_company_ids: item?.insurance_company_ids,
                 };
               });
             setCompany(customData);
@@ -81,7 +82,23 @@ export const FirstStep = ({
           console.log(err);
         });
     }
-  }, []);
+  }, [personData?.insurance_company_persons_id]);
+  const watchedValueCompany = watch("insurance_company_id")?.value;
+
+  React.useEffect(() => {
+    console.log(
+      company?.filter((fs) => fs.insurance_company_ids),
+      "----",
+      company
+    );
+    if (!watchedValueCompany) return setCompanyFiltered(company);
+    setCompanyFiltered(
+      company?.filter((fs) =>
+        fs.insurance_company_ids?.includes(Number(watchedValueCompany))
+      )
+    );
+  }, [watchedValueCompany, company]);
+
   return (
     <>
       {currentPage === 1 && (
@@ -93,7 +110,7 @@ export const FirstStep = ({
             control={control}
             placeholder={"חברת ביטוח"}
             options={insCompData ?? []}
-            defaultValue={insCompData?.find((response) => response.value === 1)}
+            // defaultValue={insCompData?.find((response) => response.value === 1)}
           />
           <CustomSelect
             isLoading={propertyTypeData.length === 0 ? true : false}
@@ -103,9 +120,9 @@ export const FirstStep = ({
             control={control}
             placeholder={"סוג הרכב"}
             options={propertyTypeData ?? []}
-            defaultValue={propertyTypeData?.find(
-              (response) => response.value === 1
-            )}
+            // defaultValue={propertyTypeData?.find(
+            //   (response) => response.value === 1
+            // )}
           />
           <WrapperInput>
             <Input
@@ -147,14 +164,14 @@ export const FirstStep = ({
             />
           </WrapperInput>
           <CustomSelect
-            isLoading={company.length === 0 ? true : false}
+            isLoading={companyFiltered?.length === 0 ? true : false}
             style={errors.agent_id && { border: "1px solid red" }}
             rules={{ required: true }}
             name={`agent_id`}
             control={control}
             placeholder={"שם הסוכן"}
-            options={company ?? []}
-            defaultValue={company?.find(
+            options={companyFiltered ?? []}
+            defaultValue={companyFiltered?.find(
               (data) =>
                 data.value === reportStorage?.report?.insurance_case?.agent_id
             )}
@@ -966,7 +983,7 @@ export const FormBeforeSubmit = ({
   const [inputText, setInputText] = React.useState("");
   const [isSdpPhone, setIsSdpPhone] = React.useState(null);
 
-  React.useEffect(() => {
+  React.useInsertionEffect(() => {
     if (cityId) {
       if (regionId) {
         setSdpData(
@@ -1026,7 +1043,7 @@ export const FormBeforeSubmit = ({
     setInputText(lowerCase);
   };
 
-  React.useEffect(() => {
+  React.useInsertionEffect(() => {
     document.getElementById("root").scrollTo({
       top: 0,
       left: 0,

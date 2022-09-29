@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+import React from "react";
 import Home from "../pages/customer/home";
 import ReportPage from "../pages/customer/report";
 import SignInCustomer from "../pages/customer/register";
@@ -11,40 +11,8 @@ import StatusCustomer from "../pages/customer/status";
 import EventsCustomer from "../pages/customer/events";
 import EventDocsCustomer from "../pages/customer/event-docs";
 import HomeAgent from "../pages/agent/home";
-import Footer from "../components/Ui/FooterComponent";
-import * as Icons from "../components/icon";
-
-// function Selector() {
-//   const userMessage = useSelector(({ user }) => user?.new_massage);
-//   return [
-//     {
-//       title: "ראשי",
-//       link: "/",
-//       icon: <Icons.Home />,
-//     },
-//     {
-//       title: "דואר",
-//       link: "/messages",
-//       icon: <Icons.Email message={userMessage} />,
-//     },
-//     {
-//       title: "אירועי לקוחות",
-//       link: "/events",
-//       icon: <Icons.CalendarIcon />,
-//     },
-//     {
-//       title: "פתח אירוע",
-//       link: "/person-list",
-//       icon: <Icons.FlagIcon />,
-//     },
-//     {
-//       title: "ארכיון",
-//       link: "/archive",
-
-//       icon: <Icons.List />,
-//     },
-//   ];
-// }
+import WithFooterComponent from "../components/Ui/WithFooter";
+import Accident from "../pages/customer/accident";
 
 const CustomerRoutes = [
   {
@@ -75,17 +43,16 @@ const CustomerRoutes = [
     path: "/event-docs/:id",
     element: <EventDocsCustomer />,
   },
+  {
+    path: "/accident",
+    element: <Accident />,
+  },
 ];
 
 const AgentRoutes = [
   {
     path: "/",
-    element: (
-      <div className="flex__column__ h-100">
-        <HomeAgent />
-        <Footer links={true} />
-      </div>
-    ),
+    element: <WithFooterComponent Component={() => <HomeAgent />} />,
   },
   {
     path: "/report",

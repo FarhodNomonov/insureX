@@ -114,7 +114,6 @@ function HomePage() {
                             className="client_title"
                             style={{ background: "none", border: "none" }}
                             onClick={() => {
-                              alert(data.status_id);
                               if (data.status_id >= 3) {
                                 navigate(`/status#${data?.id}`);
                               } else {
