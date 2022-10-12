@@ -196,8 +196,8 @@ function Accord() {
   }, [personData.agent_id, personData?.region_id]);
 
   const handleClick = ({ link, protoId, eventId, type }) => {
-    // setIsLoading(true);
     if (!link || !personData?.id) return alert("Error Person id");
+    setIsLoading(true);
     let case_type = type;
     const data = {
       insured_person_id: personData?.id,

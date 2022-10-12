@@ -1185,7 +1185,7 @@ export const FormBeforeSubmit = ({
                   SdpPatch(insidentCompany);
                   localStorage.removeItem("accident");
                   localStorage.removeItem("accidentPage");
-                  navigate("/" + localStorage.getItem("role") ?? "customer");
+                  navigate("/", { replace: true });
                 }}
                 className="list_btn"
               >
@@ -1266,7 +1266,7 @@ export const FormBeforeSubmit = ({
                   setCurrentPage(currentPage + 1);
                   localStorage.removeItem("accident");
                   localStorage.removeItem("accidentPage");
-                  navigate("/" + localStorage.getItem("role") ?? "customer");
+                  navigate("/", { replace: true });
                 }}
               >
                 סגור את החלון

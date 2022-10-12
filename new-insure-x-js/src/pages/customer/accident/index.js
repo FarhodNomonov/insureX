@@ -26,7 +26,7 @@ import {
   ThirdStep,
   SuccessStep,
   FormBeforeSubmit,
-} from "../../../components/steps/Accident.steps";
+} from "../../../components/Steps/Accident.steps";
 import PdfModal from "../../../components/Ui/Pdf";
 import { messageCar } from "../../../utils/messages";
 import { allCities } from "../../../utils/static";
