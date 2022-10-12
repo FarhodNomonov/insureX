@@ -1,19 +1,19 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
-import Button from "components/Ui/Button/Button";
-import { AccordArrowIcon, Phone, Search } from "components/Icons";
-import { SearchWrapper } from "pages/client/Message/styles";
-import { WrapperInput } from "pages/client/RegisterForm/Styles";
-import { SelectComponent } from "components/Ui/FormElements/FormElements";
+import Button from "../../components/Ui/Button/Button";
+import { AccordArrowIcon, Phone, Search } from "../../components/icon";
+import { SearchWrapper } from "../../pages/customer/messages/style";
+import { WrapperInput } from "../../pages/customer/register/style";
+import { SelectComponent } from "../../components/Ui/FormElements/FormElements";
 import {
   CityCache,
   RegionCache,
   patchRequest,
   getFormData,
   postRequest,
-} from "utils/requestsApi";
-import { Message } from "utils/messages";
+} from "../../utils/requestApi";
+import { Message } from "../../utils/messages";
 
 export default function FormBeforeSubmit({
   currentPage,
@@ -49,7 +49,7 @@ export default function FormBeforeSubmit({
 
   const Person = JSON.parse(localStorage.getItem("insured_person"));
 
-  React.useEffect(() => {
+  React.useInsertionEffect(() => {
     if (cityId) {
       if (regionId) {
         setSdpData(
@@ -87,7 +87,7 @@ export default function FormBeforeSubmit({
       );
   }, [cityId, regionId, GlobalState?.sdp]);
 
-  React.useEffect(() => {
+  React.useInsertionEffect(() => {
     document.getElementById("root").scrollTo({
       top: 0,
       left: 0,

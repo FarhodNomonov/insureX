@@ -13,6 +13,8 @@ import EventDocsCustomer from "../pages/customer/event-docs";
 import HomeAgent from "../pages/agent/home";
 import WithFooterComponent from "../components/Ui/WithFooter";
 import Accident from "../pages/customer/accident";
+import Burglarys from "../pages/customer/Burglarys";
+import CarBurglary from "../pages/customer/CarBurg";
 
 const CustomerRoutes = [
   {
@@ -46,6 +48,34 @@ const CustomerRoutes = [
   {
     path: "/accident",
     element: <Accident />,
+  },
+  {
+    path: "/carburglary",
+    element: <CarBurglary />,
+  },
+  {
+    path: "/burglary-home",
+    element: (
+      <Burglarys
+        propertyId={2}
+        typeId={6}
+        reportStorageName={"burglaryHome"}
+        isActivePage={"burglaryHomePage"}
+        pageName={"פריצה / גניבה"}
+      />
+    ),
+  },
+  {
+    path: "/burglary-office",
+    element: (
+      <Burglarys
+        propertyId={3}
+        typeId={6}
+        reportStorageName={"burglaryOffice"}
+        isActivePage={"burglaryOfficePage"}
+        pageName={"פריצה / גניבה"}
+      />
+    ),
   },
 ];
 

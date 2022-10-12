@@ -1,3 +1,5 @@
+import { useRef } from "react";
+import { ReactSketchCanvas } from "react-sketch-canvas";
 import {
   Modal,
   ModalBody,
@@ -5,12 +7,9 @@ import {
   ModalHeader,
   ModalHeaderIconWrapper,
   ModalHeaderTitle,
-} from "pages/client/RegisterForm/Styles";
-import { useRef } from "react";
+} from "../../../pages/customer/register/style";
 import DrawerBg from "../../../assets/img/auto_car_bg.svg";
-
-import { ReactSketchCanvas } from "react-sketch-canvas";
-import { Tach } from "../../Icons/index";
+import { Tach } from "../../icon";
 
 function DrawerCanvas({ open = false, setOpen, setImageBg }) {
   const canvasEl = useRef(null);
