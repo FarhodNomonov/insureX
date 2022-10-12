@@ -109,7 +109,7 @@ const SignIn = () => {
           setSucces(true);
           successMessage("בהצלחה!");
           setIsLoading(false);
-          console.log("cleared");
+          console.clear();
         }
         if (!data?.message?.token) {
           setIsLoading(false);

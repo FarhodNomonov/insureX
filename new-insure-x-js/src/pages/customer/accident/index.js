@@ -26,7 +26,7 @@ import {
   ThirdStep,
   SuccessStep,
   FormBeforeSubmit,
-} from "../../../components/Steps/Accident.steps";
+} from "../../../components/steps/Accident.steps";
 import PdfModal from "../../../components/Ui/Pdf";
 import { messageCar } from "../../../utils/messages";
 import { allCities } from "../../../utils/static";
@@ -198,7 +198,7 @@ function Accident() {
         status_id: 1,
         id: reportStorage?.report?.insurance_case?.id,
       };
-      console.log("cleared");
+      console.clear();
       console.log(report);
       localStorage.setItem("accident", JSON.stringify(report));
       reset();
@@ -215,7 +215,7 @@ function Accident() {
         license_number: data.license_number,
         has_permission: data.has_permission,
       };
-      console.log("cleared");
+      console.clear();
       console.log(report);
       localStorage.setItem("accident", JSON.stringify(report));
       reset();
@@ -249,7 +249,7 @@ function Accident() {
         damage_picture: drawerImage,
       };
       report.report.incident_type = data.incident_type;
-      console.log("cleared");
+      console.clear();
       console.log(report);
       localStorage.setItem("accident", JSON.stringify(report));
       reset();
@@ -259,7 +259,7 @@ function Accident() {
   const fourthStepSubmit = (data) => {
     if (currentPage === 4) {
       report.report.victim = data?.injuryData;
-      console.log("cleared");
+      console.clear();
       console.log(report);
       localStorage.setItem("accident", JSON.stringify(report));
       setCurrentPage(currentPage + 1);
@@ -269,7 +269,7 @@ function Accident() {
   const fifthStepSubmit = (data) => {
     if (currentPage === 5) {
       report.report.other = data;
-      console.log("cleared");
+      console.clear();
       console.log(report);
       localStorage.setItem("accident", JSON.stringify(report));
       reset();
@@ -289,7 +289,7 @@ function Accident() {
         },
         document_date: data.document_date,
       };
-      console.log("cleared");
+      console.clear();
       console.log(report);
       localStorage.setItem("accident", JSON.stringify(report));
       const Requests = () => {
@@ -407,7 +407,7 @@ function Accident() {
             getFormData(PatchData)
           ).then(({ error }) => {
             if (!error) {
-              console.log("cleared");
+              console.clear();
               if (report.report.car) {
                 postRequest(
                   `/insurance-case/${
@@ -459,7 +459,7 @@ function Accident() {
               city: cityId.city_name,
               status_id: 1,
             };
-            console.log("cleared");
+            console.clear();
             console.log(report);
             localStorage.setItem("accident", JSON.stringify(report));
             messageCar(message?.insurance_case?.id, "car");

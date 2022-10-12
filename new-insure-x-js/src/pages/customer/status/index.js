@@ -167,7 +167,7 @@ function Status({ HeaderRemove = false, isActiveID = undefined }) {
         );
       }
     }
-    console.log("cleared");
+    console.clear();
   }, [isType, Person?.id]);
 
   return (

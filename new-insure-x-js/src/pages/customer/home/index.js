@@ -52,10 +52,10 @@ function HomePage() {
             ?.sort((a, b) => b.id - a.id)
         );
         setIsLoading(false);
-        console.log("cleared");
+        console.clear();
       })
       .catch((err) => {
-        console.log("cleared");
+        console.clear();
         console.log(err);
         setCaseData([]);
         setIsLoading(false);
