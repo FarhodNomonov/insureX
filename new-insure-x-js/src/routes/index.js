@@ -15,6 +15,9 @@ import WithFooterComponent from "../components/Ui/WithFooter";
 import Accident from "../pages/customer/accident";
 import Burglarys from "../pages/customer/Burglarys";
 import CarBurglary from "../pages/customer/CarBurg";
+import FireDamage from "../pages/customer/FireDamage";
+import NatureHome from "../pages/customer/NatureHome";
+
 
 const CustomerRoutes = [
   {
@@ -76,6 +79,36 @@ const CustomerRoutes = [
         pageName={"פריצה / גניבה"}
       />
     ),
+  },
+  {
+    path: "/fire-damage-home",
+    element: (
+      <FireDamage
+        headerTitle={"פתיחת אירוע רכוש - אש"}
+        propertyId={2}
+        typeId={4}
+        reportStorageName={"fireDamageHome"}
+        isActivePage={"fireHomePage"}
+        pageName={"אש"}
+      />
+    ),
+  },
+  {
+    path: "/fire-damage-office",
+    element: (
+      <FireDamage
+        headerTitle={"פתיחת אירוע רכוש - אש"}
+        propertyId={3}
+        typeId={4}
+        reportStorageName={"fireDamageOffice"}
+        isActivePage={"fireOfficePage"}
+        pageName={"אש"}
+      />
+    ),
+  },
+  {
+    path: "/nature-damage-home",
+    element: <NatureHome />,
   },
 ];
 
