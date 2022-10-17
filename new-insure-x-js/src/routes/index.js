@@ -17,7 +17,9 @@ import Burglarys from "../pages/customer/Burglarys";
 import CarBurglary from "../pages/customer/CarBurg";
 import FireDamage from "../pages/customer/FireDamage";
 import NatureHome from "../pages/customer/NatureHome";
-
+import NatureOffice from "../pages/customer/NatureOffice";
+import ThreeDPerson from "../pages/customer/ThreeDPerson";
+import WaterDamage from "../pages/customer/WaterDamage";
 
 const CustomerRoutes = [
   {
@@ -109,6 +111,63 @@ const CustomerRoutes = [
   {
     path: "/nature-damage-home",
     element: <NatureHome />,
+  },
+  {
+    path: "/nature-damage-office",
+    element: <NatureOffice />,
+  },
+  {
+    path: "/person-3d-home",
+    element: (
+      <ThreeDPerson
+        propertyId={2}
+        typeId={7}
+        isActivePage="person3dHomePage"
+        reportStorageName="person-3d-home"
+        pageName={"צד שלישי"}
+      />
+    ),
+  },
+  {
+    path: "/person-3d-office",
+    element: (
+      <ThreeDPerson
+        propertyId={3}
+        typeId={7}
+        isActivePage="person3dOfficePage"
+        reportStorageName="person-3d-office"
+        pageName={"צד שלישי"}
+      />
+    ),
+  },
+  {
+    path: "/water-damage-home",
+    element: (
+      <WaterDamage
+        headerTitle={"פתיחת אירוע רכוש - נזקי מים "}
+        propertyId={3}
+        typeId={2}
+        reportStorageName={"waterDamageOffice"}
+        isActivePage={"waterOfficePage"}
+        pageName={"מים"}
+        noFilterSdp
+      />
+    ),
+  },
+  {
+    path: "/water-damage-office",
+    element: (
+      <WaterDamage
+        headerTitle={"אירוע אחר"}
+        propertyId={3}
+        typeId={8}
+        reportStorageName={"OtherOffice"}
+        isActivePage={"OtherOfficePage"}
+        pageName={"אחר"}
+        suppliyerType={8}
+        noFilterSdp
+      />
+    ),
   },
 ];
 
