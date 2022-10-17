@@ -13,13 +13,13 @@ import EventDocsCustomer from "../pages/customer/event-docs";
 import HomeAgent from "../pages/agent/home";
 import WithFooterComponent from "../components/Ui/WithFooter";
 import Accident from "../pages/customer/accident";
-import Burglarys from "../pages/customer/Burglarys";
-import CarBurglary from "../pages/customer/CarBurg";
-import FireDamage from "../pages/customer/FireDamage";
-import NatureHome from "../pages/customer/NatureHome";
-import NatureOffice from "../pages/customer/NatureOffice";
-import ThreeDPerson from "../pages/customer/ThreeDPerson";
-import WaterDamage from "../pages/customer/WaterDamage";
+import Burglarys from "../pages/customer/burglarys";
+import CarBurglary from "../pages/customer/carBurg";
+import FireDamage from "../pages/customer/fireDamage";
+import NatureHome from "../pages/customer/natureHome";
+import NatureOffice from "../pages/customer/natureOffice";
+import ThreeDPerson from "../pages/customer/threeDPerson";
+import WaterDamage from "../pages/customer/waterDamage";
 
 const CustomerRoutes = [
   {
