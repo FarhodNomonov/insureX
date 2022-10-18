@@ -2,7 +2,6 @@ import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Header from "../../../components/Ui/Header";
-import Footer from "../../../components/Ui/FooterComponent";
 import {
   CheckBoxIcon,
   CloudUpload,
@@ -1232,7 +1231,6 @@ function ThreeDPerson({
         </div>
       )}
 
-      <Footer />
       <PdfModal
         event_type={"צד שלישי"}
         data={reportStorage?.report}

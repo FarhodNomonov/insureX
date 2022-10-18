@@ -268,13 +268,25 @@ export const onSavePhoto = (e, setIsLoading, isCaseId, folder) => {
     alert("נא נסה שוב הקובץ גדול מ- 50 מגה-בתים,");
     return;
   }
+
   if (isCaseId) {
+    let file = Object.assign({}, e.target.files[0], {
+      name: `${isCaseId}.${new Date().toLocaleString("lt", {
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+      })}.${e.target.files[0].type?.split("/")[1]}`,
+    });
+    let formData = new FormData();
+    delete e.target.files[0].name;
+    formData.append("file", e.target.files[0], file.name);
+    console.log(formData.get("file"), "22323232");
+
     setIsLoading(true);
-    const formData = { file: e.target.files[0] };
 
     const data = patchRequest(
       `/insurance-case/${isCaseId}/upload-files?folder=${folder}`,
-      getFormData(formData)
+      formData
     ).then((data) => {
       setIsLoading(false);
       return data;

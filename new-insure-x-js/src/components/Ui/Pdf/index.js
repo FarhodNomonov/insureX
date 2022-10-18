@@ -1,11 +1,18 @@
-import React, { useRef, useInsertionEffect } from "react";
+import React, { useRef, useInsertionEffect, useEffect } from "react";
 import { Modal } from "../../../pages/customer/register/style";
 import { getFormData, getRequest, PostPDF } from "../../../utils/requestApi";
 
-function PdfModal({ data, open, event_type, sign_picture = null, user }) {
+function PdfModal({ data, open, event_type, sign_picture = null }) {
   const [agents, setAgents] = React.useState([]);
+  let PersonData = JSON.parse(localStorage.getItem("insured_person") || "{}");
   const pdfExportComponent = useRef(null);
   const Rerender = useRef(false);
+
+  const options = {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+  };
 
   useInsertionEffect(() => {
     Rerender.current = true;
@@ -22,13 +29,17 @@ function PdfModal({ data, open, event_type, sign_picture = null, user }) {
                 ?.folder_google_drive_id,
             insuredEventId: res?.message?.insurance_case?.insured_event_id,
             folderType: "docs",
+            fileName: `${data?.insurance_case?.id}.${new Date().toLocaleString(
+              "lt",
+              options
+            )}`,
           })
         ).then((res) => console.log(res));
       });
     }
   }, [open]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (data?.insurance_case?.agent_id) {
       getRequest(`/agents/select?id=${data?.insurance_case?.agent_id}`).then(
         (res) => {
@@ -165,26 +176,26 @@ function PdfModal({ data, open, event_type, sign_picture = null, user }) {
                 <h2>תאריך הדפסה:</h2>
                 <h2>{new Date().toLocaleString()}</h2>
               </div>
-              {user && (
+              {PersonData && (
                 <div className="personal_information">
                   <div className="person_title">
                     <h2>מידע אישי:</h2>
                   </div>
                   <div className="person_information_title">
                     <h1>שָׁם:</h1>
-                    <h2>{`${user?.first_name} ${user?.second_name}`}</h2>
+                    <h2>{`${PersonData?.first_name} ${PersonData?.second_name}`}</h2>
                   </div>
                   <div className="person_information_title">
                     <h1>דוא״ל:</h1>
-                    <h2>{user?.email}</h2>
+                    <h2>{PersonData?.email}</h2>
                   </div>
                   <div className="person_information_title">
                     <h1>טלפון:</h1>
-                    <h2>{user?.phone}</h2>
+                    <h2>{PersonData?.phone}</h2>
                   </div>
                   <div className="person_information_title">
                     <h1>מען:</h1>
-                    <h2>{user?.address}</h2>
+                    <h2>{PersonData?.address}</h2>
                   </div>
                 </div>
               )}

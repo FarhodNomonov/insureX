@@ -11,7 +11,10 @@ import {
   Galery,
 } from "../../../components/icon";
 import { Paragraf } from "./styles";
-import { Input, WrapperInput } from "../../../components/Ui/FormElements/Styles";
+import {
+  Input,
+  WrapperInput,
+} from "../../../components/Ui/FormElements/Styles";
 import { SelectComponent } from "../../../components/Ui/FormElements/FormElements";
 import Button from "../../../components/Ui/Button/Button";
 import DrawerUser from "../../../components/Ui/DrawerPodpis";
@@ -37,7 +40,6 @@ import FormBefore from "../../../components/Steps/FormBefore";
 import PdfModal from "../../../components/Ui/Pdf";
 import UseCamera from "../../../hook/useCamera";
 import { Message, messageOther } from "../../../utils/messages";
-
 
 let report = { report: {} };
 
@@ -194,11 +196,9 @@ function Waterdamage({
       console.log(reportStorage);
       localStorage.setItem(reportStorageName, JSON.stringify(report));
     }
-  }, [reportStorage?.report?.insurance_case?.id]);
+  }, [reportStorage, reportStorageName]);
 
   // form fields
-
-  
 
   const onSubmit = (data) => {
     setIsReset(false);

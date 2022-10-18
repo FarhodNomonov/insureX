@@ -189,7 +189,7 @@ function NatureOffice() {
       console.log(reportStorage);
       localStorage.setItem("natureDamageOffice", JSON.stringify(report));
     }
-  }, [reportStorage?.report?.insurance_case?.id]);
+  }, [reportStorage]);
 
   // form fields
   const [isReset, setIsReset] = React.useState(true);

@@ -1,7 +1,5 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
-import Footer from "../../../components/Ui/FooterComponent";
 import Header from "../../../components/Ui/Header";
 import {
   getRequest,
@@ -19,9 +17,9 @@ import {
   EventListInfo,
   EventListTitle,
   FileNotFound,
-  SortableButton,
   NumberList,
-} from "./style";
+  SortableButton,
+} from "./styles";
 import {
   FolderIcon,
   DotsFunction,
@@ -32,6 +30,8 @@ import {
   FileIcon,
   Search,
 } from "../../../components/icon";
+import IconJpg from "../../../components/icon/iconJPG.png";
+import IconPng from "../../../components/icon/iconPNG.png";
 import IconSvg from "../../../components/icon/iconSVG.png";
 import IconGif from "../../../components/icon/iconGIF.png";
 import IconPdf from "../../../components/icon/iconPDF.png";
@@ -41,7 +41,6 @@ import FolderDocs from "../../../components/icon/folderDocs.png";
 
 function EventDocs() {
   const { id } = useParams();
-  const Person = useSelector(({ user }) => user?.user);
   const [isOpen, setIsOpen] = React.useState(false);
   const [eventListData, setEventListData] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -49,6 +48,7 @@ function EventDocs() {
   const [isDesign, setIsDesign] = React.useState(false);
   const [inputText, setInputText] = React.useState("");
   const [isNowUpload, setIsNowUpload] = React.useState(false);
+  const Agent = JSON.parse(localStorage.getItem("agent"));
   const [isOpenMenu, setIsOpenMenu] = React.useState(false);
 
   const handleClickOutside = React.useCallback(() => {
@@ -57,7 +57,7 @@ function EventDocs() {
   const handleClick = React.useCallback(() => {
     setIsOpen(true);
   }, []);
-  React.useEffect(() => {
+  React.useInsertionEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -79,7 +79,7 @@ function EventDocs() {
           console.log(err);
         });
     }
-  }, [isNowUpload, id]);
+  }, [isNowUpload]);
 
   const FileUpload = (e, id) => {
     setIsNowUpload(false);
@@ -95,14 +95,14 @@ function EventDocs() {
       });
   };
 
-  const FileType = (type, link) => {
+  const FileType = (type) => {
     return type?.split(".")[type?.split(".").length - 1] === "jpg" ||
       type?.split(".")[type?.split(".").length - 1] === "jpeg" ? (
-      <img src={link?.split("&export")[0]} alt="icon" />
+      <img src={IconJpg} alt="icon" />
     ) : type?.split(".")[type?.split(".").length - 1] === "svg" ? (
       <img src={IconSvg} alt="icon" />
     ) : type?.split(".")[type?.split(".").length - 1] === "png" ? (
-      <img src={link?.split("&export")[0]} alt="icon" />
+      <img src={IconPng} alt="icon" />
     ) : type?.split(".")[type?.split(".").length - 1] === "gif" ? (
       <img src={IconGif} alt="icon" />
     ) : type?.split(".")[type?.split(".").length - 1] === "pdf" ? (
@@ -152,8 +152,12 @@ function EventDocs() {
       <div>
         {isLoading && <Loader />}
         <Header
-          text={`שלום ${Person?.first_name}`}
-          title={`מסמכים ${id ? `(${id})` : ""} `}
+          bg="#561D57"
+          head="יישומון סוכן"
+          text={`שלום ${Agent?.first_name}`}
+          title={`שלום  ${
+            id ? `(${id + Agent?.first_name}})` : Agent?.first_name
+          }} `}
         />
         <EventDocsMain>
           <SortableButton>
@@ -204,7 +208,7 @@ function EventDocs() {
               )}
               {!isOpenMenu && (
                 <div className="speace">
-                  <img src={FolderDocs} alt="..." className="icon" />
+                  <img src={FolderDocs} alt="" className="icon" />
                   <p>{id} - Event Folders</p>
                 </div>
               )}
@@ -267,12 +271,12 @@ function EventDocs() {
                         }}
                       >
                         <a
-                          href={`${data?.link ?? "/"}`}
+                          href={data?.link}
                           target="_blank"
                           rel="noopener noreferrer"
                         >
                           <EventList>
-                            {FileType(data?.file_name, data?.link)}
+                            {FileType(data?.file_name)}
                             <EventListInfo>
                               <EventListTitle>{data?.file_name}</EventListTitle>
                             </EventListInfo>
@@ -304,7 +308,7 @@ function EventDocs() {
               {!isOpenMenu && (
                 <>
                   <EventList onClick={() => setIsOpenMenu("images")}>
-                    <a href="#docs">
+                    <a target="_blank" rel="noopener noreferrer">
                       <EventList>
                         <img
                           src={FolderImages}
@@ -321,7 +325,7 @@ function EventDocs() {
                     </a>
                   </EventList>
                   <EventList onClick={() => setIsOpenMenu("photos")}>
-                    <a href="#docs">
+                    <a target="_blank" rel="noopener noreferrer">
                       <EventList>
                         <img src={FolderPhotos} alt="" className="icon" />
                         <EventListInfo>
@@ -331,7 +335,7 @@ function EventDocs() {
                     </a>
                   </EventList>
                   <EventList onClick={() => setIsOpenMenu("docs")}>
-                    <a href="#docs">
+                    <a target="_blank" rel="noopener noreferrer">
                       <EventList>
                         <img src={FolderDocs} alt="" className="icon" />
                         <EventListInfo>
@@ -360,7 +364,6 @@ function EventDocs() {
           )}
         </EventDocsMain>
       </div>
-      <Footer />
     </div>
   );
 }

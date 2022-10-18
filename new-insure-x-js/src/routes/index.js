@@ -20,6 +20,7 @@ import NatureHome from "../pages/customer/natureHome";
 import NatureOffice from "../pages/customer/natureOffice";
 import ThreeDPerson from "../pages/customer/threeDPerson";
 import WaterDamage from "../pages/customer/waterDamage";
+import MessagesAgent from "../pages/agent/Message/index";
 
 const CustomerRoutes = [
   {
@@ -177,8 +178,8 @@ const AgentRoutes = [
     element: <WithFooterComponent Component={() => <HomeAgent />} />,
   },
   {
-    path: "/report",
-    element: <>REPORT PAGE</>,
+    path: "/messages",
+    element: <MessagesAgent />,
   },
 ];
 

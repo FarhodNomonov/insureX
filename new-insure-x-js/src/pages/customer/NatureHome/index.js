@@ -186,7 +186,7 @@ function NatureHome() {
       console.log(reportStorage);
       localStorage.setItem("natureDamageHome", JSON.stringify(report));
     }
-  }, [reportStorage?.report?.insurance_case?.id]);
+  }, [reportStorage]);
 
   // form fields
   const [isReset, setIsReset] = React.useState(true);
@@ -212,7 +212,6 @@ function NatureHome() {
               city_id: personData?.city_id ?? cityId?.id,
               agent_phone: agentPhone?.phone ?? null,
               status_id: 1,
-              insured_person_id: personData?.id,
             };
             console.log(report);
             localStorage.setItem("natureDamageHome", JSON.stringify(report));

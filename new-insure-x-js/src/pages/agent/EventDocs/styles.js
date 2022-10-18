@@ -57,7 +57,6 @@ export const EventList = styled.div`
     width: 45px;
     height: 45px;
     margin-right: 10px;
-    object-fit: contain;
   }
 
   .dots_ {
@@ -162,7 +161,6 @@ export const SortableButton = styled.div`
     img {
       width: 30px;
       height: 30px;
-      object-fit: contain;
     }
     svg {
       transform: rotate(90deg);
@@ -241,7 +239,6 @@ export const FileNotFound = styled.div`
     text-align: center;
   }
 `;
-
 export const NumberList = styled.div`
   font-size: 20px;
   font-weight: bold;

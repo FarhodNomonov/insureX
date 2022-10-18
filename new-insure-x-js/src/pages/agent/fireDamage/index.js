@@ -2,7 +2,6 @@ import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Header from "../../../components/Ui/Header";
-import Footer from "../../../components/Ui/FooterComponent";
 import {
   CheckBoxIcon,
   CloudUpload,
@@ -10,11 +9,8 @@ import {
   Camera,
   Galery,
 } from "../../../components/icon";
-import { Paragraf } from "./styles";
-import {
-  Input,
-  WrapperInput,
-} from "../../../components/Ui/FormElements/Styles";
+import { Paragraf } from "./style";
+import { Input, WrapperInput } from "../../../components/Ui/FormElements/Styles";
 import { SelectComponent } from "../../../components/Ui/FormElements/FormElements";
 import Button from "../../../components/Ui/Button/Button";
 import DrawerUser from "../../../components/Ui/DrawerPodpis";
@@ -39,39 +35,32 @@ import { onSavePhoto } from "../../../utils/requestApi";
 import FormBefore from "../../../components/Steps/FormBefore";
 import PdfModal from "../../../components/Ui/Pdf";
 import UseCamera from "../../../hook/useCamera";
-import { Message } from "../../../utils/messages";
+import { Message, messageOther } from "../../../utils/messages";
 
 let report = { report: {} };
 
-function ThreeDPerson({
+function FireDamage({
   propertyId = 2,
-  typeId = 7,
+  typeId = 9,
+  headerTitle = "פתיחת אירוע רכוש - אש",
   reportStorageName = "",
   isActivePage = "",
+  namePage = "",
 }) {
   const location = useLocation();
   const navigate = useNavigate();
-  let reportStorage = JSON.parse(localStorage.getItem(reportStorageName));
   let personData = JSON.parse(localStorage.getItem("insured_person")) ?? {};
-  const Person = JSON.parse(localStorage.getItem("insured_person"));
-
+  let reportStorage = JSON.parse(localStorage.getItem(reportStorageName));
   const [currentPage, setCurrentPage] = React.useState(
     Number(localStorage.getItem(isActivePage) ?? 1) ?? 1
   );
+  const [openCamera, setOpenCamera] = React.useState(false);
   const [agentPhone, setAgentPhone] = React.useState(null);
   const [companyAgentId, setCompanyAgentId] = React.useState(null);
-  const [threeDPerson, setThreeDPerson] = React.useState(
-    reportStorage?.report?.third_person?.threeDPerson !== undefined
-      ? true
-      : false
-  );
-  const [openCamera, setOpenCamera] = React.useState(false);
-  const [isReset, setIsReset] = React.useState(true);
-
+  const [openPdf, setOpenPdf] = React.useState(false);
   // drawer canvas
 
   const [drawing, setDrawing] = React.useState(null);
-  const [openPdf, setOpenPdf] = React.useState(false);
 
   // isLoading Loader
 
@@ -80,8 +69,9 @@ function ThreeDPerson({
   // get data from api
 
   const [companyAgent, setCompanyAgent] = React.useState([]);
-  const [cityId, setCityId] = React.useState("");
+  const [cityId, setCityId] = React.useState({});
   const [iscurrent, setIscurrent] = React.useState(false);
+  const Person = JSON.parse(localStorage.getItem("insured_person"));
   const [insCompData, setInsCompData] = React.useState([]);
   const [changeCmpId, setChangeCmpId] = React.useState(null);
 
@@ -92,6 +82,11 @@ function ThreeDPerson({
     setValue,
     formState: { errors },
   } = useForm();
+
+  React.useInsertionEffect(() => {
+    localStorage.setItem(isActivePage, currentPage);
+    reset();
+  }, [currentPage]);
 
   if (location?.hash.split("#")[1]) {
     report.report = {
@@ -111,11 +106,6 @@ function ThreeDPerson({
   }
 
   React.useInsertionEffect(() => {
-    localStorage.setItem(isActivePage, currentPage);
-    reset();
-  }, [currentPage]);
-
-  React.useInsertionEffect(() => {
     if (!changeCmpId) return;
     getRequest(`/agents/select?insurance_company_id=${changeCmpId}`)
       .then((res) => {
@@ -130,26 +120,12 @@ function ThreeDPerson({
             });
           setCompanyAgent(customData);
           setCompanyAgentId(customData[0]?.id);
-          const FindDate = res?.message?.agents?.find(
-            (res) => res?.id === reportStorage?.report?.insurance_case?.agent_id
-          );
-          setValue("agent_id", {
-            label: `${FindDate?.first_name} ${FindDate?.second_name}`,
-            value: FindDate?.id,
-          });
-          setValue("agent_phone", FindDate?.phone);
         }
       })
       .catch((err) => {
         console.log(err);
       });
   }, [changeCmpId]);
-
-  React.useInsertionEffect(() => {
-    if (currentPage === 1) {
-      setValue("address", personData?.address);
-    } else setValue("address", "");
-  }, [currentPage]);
 
   React.useInsertionEffect(() => {
     if (personData?.city_id) {
@@ -192,27 +168,10 @@ function ThreeDPerson({
   }, [companyAgentId]);
 
   // form fields
-  React.useMemo(() => {
-    if (reportStorage?.report?.insurance_case?.id) {
-      report.report.insurance_case = {
-        ...reportStorage?.report?.insurance_case,
-        id:
-          reportStorage?.report?.insurance_case?.id ??
-          report?.report?.insurance_case?.id,
-      };
-      report.report.estate = {
-        ...reportStorage?.report?.estate,
-      };
-      report.report.third_person = {
-        ...reportStorage?.report?.third_person,
-      };
 
-      console.clear();
-      console.log(reportStorage);
-      localStorage.setItem(reportStorageName, JSON.stringify(report));
-    }
-  }, [reportStorage, reportStorageName]);
+ 
 
+  const [isReset, setIsReset] = React.useState(true);
   const onSubmit = (data) => {
     setIsReset(false);
     if (!reportStorage?.report?.insurance_case?.id) {
@@ -223,46 +182,40 @@ function ThreeDPerson({
           event_type_id: typeId,
           document_date: new Date().toISOString(),
           status_id: 1,
+        };
+        postRequest("/insurance-case", getFormData(dataForm)).then(
+          ({ message }) => {
+            if (agentPhone) {
+              report.report.insurance_case = {
+                ...reportStorage.report.insurance_case,
+                agent_id:
+                  companyAgentId ??
+                  agentPhone?.id ??
+                  reportStorage?.report?.insurance_case?.agent_id,
+                policy: data.policy,
+                id: message?.insurance_case?.id,
+                status_id: 1,
+                city_id: personData?.city_id ?? cityId.id,
+              };
+              console.log(report);
+              localStorage.setItem(reportStorageName, JSON.stringify(report));
+              setCurrentPage(currentPage + 1);
+              messageOther(message?.insurance_case?.id, "other");
+            }
+          }
+        );
+      }
+    }
+    if (currentPage === 1) {
+      if (agentPhone) {
+        report.report.insurance_case = {
+          ...reportStorage?.report?.insurance_case,
           agent_id:
             companyAgentId ??
             agentPhone?.id ??
             reportStorage?.report?.insurance_case?.agent_id,
-        };
-        if (agentPhone) {
-          postRequest("/insurance-case", getFormData(dataForm)).then(
-            ({ message }) => {
-              report.report.insurance_case = {
-                ...report.report.insurance_case,
-                agent_id:
-                  companyAgentId ??
-                  agentPhone?.id ??
-                  reportStorage.report.insurance_case.agent_id,
-                policy: data.policy,
-                id: message?.insurance_case?.id,
-                status_id: message?.insurance_case?.status_id,
-                city_id: personData?.city_id ?? cityId.id,
-                insured_person_id: personData?.id,
-              };
-              console.clear();
-              console.log(report);
-              localStorage.setItem(reportStorageName, JSON.stringify(report));
-            }
-          );
-        }
-      }
-    }
-
-    if (currentPage === 1) {
-      if (agentPhone) {
-        report.report.insurance_case = {
-          ...report.report.insurance_case,
-          agent_id:
-            agentPhone?.id ?? reportStorage?.report?.insurance_case?.agent_id,
-          agent_phone: agentPhone?.phone,
           policy: data.policy,
-          insured_person_id: personData?.id,
           city_id: personData?.city_id ?? cityId.id,
-          document_date: new Date().toISOString(),
         };
         console.log(report);
         localStorage.setItem(reportStorageName, JSON.stringify(report));
@@ -272,14 +225,16 @@ function ThreeDPerson({
     }
     if (currentPage === 2) {
       report.report.insurance_case = {
-        ...report.report.insurance_case,
+        ...reportStorage.report.insurance_case,
         address: data.address,
         details: data?.details,
         date: `${data.date} : ${data.time}`,
         time: data.time,
         incident_date: data.date,
-        agent_id:
-          agentPhone?.id ?? reportStorage?.report?.insurance_case?.agent_id,
+        city_id: personData?.city_id ?? cityId.id,
+        status_id: 2,
+        document_date: new Date().toISOString(),
+        insured_person_id: personData?.id,
       };
       report.report.estate = {
         damage_amount: data.damage_amount,
@@ -296,62 +251,26 @@ function ThreeDPerson({
       setCurrentPage(currentPage + 1);
     }
     if (currentPage === 3) {
-      if (threeDPerson === true) {
-        report.report.third_person = data;
-      }
-      if (threeDPerson === false) {
-        report.report.third_person = {
-          threeDPerson: false,
-        };
-      }
+      report.report.incident_participants = {
+        insurance_case_ids: reportStorage?.report?.insurance_case?.id,
+        police: data?.police === "true",
+        fire_fighters: data?.fire_fighters === "true",
+      };
       console.log(report);
       localStorage.setItem(reportStorageName, JSON.stringify(report));
       reset();
       setCurrentPage(currentPage + 1);
     }
-
     if (currentPage === 4) {
       setOpenPdf(true);
       report.report.insurance_case = {
-        ...report.report.insurance_case,
+        ...reportStorage.report.insurance_case,
         document_date: data.document_date,
         whose_signature: data.whose_signature,
         claim_amount: data.claim_amount,
-        status_id: 3,
-        id: reportStorage?.report?.insurance_case?.id,
       };
-      localStorage.setItem(reportStorageName, JSON.stringify(report));
       const Requests = () => {
         setIsLoading(true);
-        patchRequest(
-          `/insured-persons/${personData?.id}`,
-          getFormData({ sign_picture: drawing })
-        );
-
-        if (report.report.third_person) {
-          threeDPerson &&
-            postRequest(
-              `/insurance-case/${reportStorage?.report?.insurance_case?.id}/3d-person`,
-              getFormData(report.report.third_person)
-            );
-          const PatchData = report.report.insurance_case;
-          delete PatchData?.id;
-          PatchData.role = "customer";
-          patchRequest(
-            `/insurance-case/${
-              location?.hash.split("#")[1] ??
-              reportStorage?.report?.insurance_case?.id ??
-              report?.report?.insurance_case?.id
-            }`,
-            getFormData(PatchData)
-          ).then((res) => {
-            if (!res.error) {
-              setIsLoading(false);
-              report.report.insurance_case.id = res.message.insurance_case.id;
-            }
-          });
-        }
-
         if (report.report.incident_participants) {
           postRequest(
             `/incident-participant`,
@@ -360,12 +279,39 @@ function ThreeDPerson({
         }
 
         postRequest("/estate", getFormData(report.report.estate));
+
+        report.report.insurance_case.status_id = 3;
+        const PatchData = {
+          ...report.report.insurance_case,
+        };
+        delete PatchData.id;
+        PatchData.role = "customer";
+        patchRequest(
+          `/insurance-case/${
+            location?.hash.split("#")[1]
+              ? location?.hash.split("#")[1]
+              : reportStorage?.report?.insurance_case?.id ??
+                report?.report?.insurance_case?.id
+          }`,
+          getFormData(PatchData)
+        ).then(({ error }) => {
+          if (!error) {
+            patchRequest(
+              `/insured-persons/${personData?.id}`,
+              getFormData({ sign_picture: drawing })
+            ).then((res) => {
+              if (!res.error) {
+                setIsLoading(false);
+              }
+            });
+          }
+        });
       };
-      localStorage.setItem(reportStorageName, JSON.stringify(report));
       reset();
       Requests();
       setCurrentPage(currentPage + 1);
       console.log(report);
+      localStorage.setItem(reportStorageName, JSON.stringify(report));
     }
     const root = document.getElementById("root");
     root.scrollTo({
@@ -374,6 +320,20 @@ function ThreeDPerson({
       behavior: "smooth",
     });
   };
+
+  React.useInsertionEffect(() => {
+    if (currentPage === 1) {
+      setValue("address", personData?.address);
+    } else setValue("address", "");
+  }, [currentPage]);
+
+  React.useInsertionEffect(() => {
+    if (companyAgentId) {
+      getRequest(`/agents/select?id=${companyAgentId}`).then((res) => {
+        setAgentPhone(res?.message?.agents?.find((status) => !status.delete));
+      });
+    }
+  }, [companyAgentId]);
 
   React.useInsertionEffect(() => {
     if (currentPage === 1) {
@@ -390,8 +350,8 @@ function ThreeDPerson({
     }
     if (currentPage === 2) {
       setValue("date", reportStorage?.report?.insurance_case?.incident_date);
-      setValue("time", reportStorage?.report?.insurance_case?.time);
       setValue("details", reportStorage?.report?.insurance_case?.details);
+      setValue("time", reportStorage?.report?.insurance_case?.time);
       setValue(
         "additional_insurance_info",
         reportStorage?.report?.estate?.additional_insurance_info
@@ -414,14 +374,13 @@ function ThreeDPerson({
     }
     if (currentPage === 3) {
       setValue(
-        "threeDPerson",
-        `${reportStorage?.report?.third_person?.threeDPerson}`
+        "fire_fighters",
+        `${reportStorage?.report?.incident_participants?.fire_fighters}`
       );
-      setValue("address", reportStorage?.report?.third_person?.address);
-      setValue("damage_info", reportStorage?.report?.third_person?.damage_info);
-      setValue("first_name", reportStorage?.report?.third_person?.first_name);
-      setValue("last_name", reportStorage?.report?.third_person?.last_name);
-      setValue("phone", reportStorage?.report?.third_person?.phone);
+      setValue(
+        "police",
+        `${reportStorage?.report?.incident_participants?.police}`
+      );
     }
   }, [currentPage]);
 
@@ -429,10 +388,7 @@ function ThreeDPerson({
     <AccidentForm className="flex__column__ h-100">
       {isLoading && <Loader />}
       <div>
-        <Header
-          title="פתיחת אירוע רכוש - נזק לצד ג'"
-          text={`שלום ${Person?.first_name}`}
-        />
+        <Header title={headerTitle} text={`שלום ${Person?.first_name}`} />
         {currentPage < 5 && (
           <div className="step_form_container">
             <div className="step_form_paginations">
@@ -471,6 +427,7 @@ function ThreeDPerson({
                 className={`step_form_pagination ${
                   currentPage > 3 && "active"
                 }`}
+                // onClick={() => setCurrentPage(currentPage > 2 ? 3 : currentPage)}
               />
             </div>
             <div className="step_form_content">
@@ -481,7 +438,7 @@ function ThreeDPerson({
                     : currentPage === 2
                     ? "תיאור הנזק"
                     : currentPage === 3
-                    ? "השלמת פרטים נזקי צד ג'"
+                    ? "השלמת פרטים נזקי אש"
                     : currentPage === 4
                     ? "הצהרת המבוטח"
                     : ""}
@@ -519,32 +476,23 @@ function ThreeDPerson({
                         placeholder={"מס' פוליסה"}
                       />
                     </WrapperInput>
-                    <WrapperInput>
-                      <SelectComponent
-                        value={companyAgent}
-                        setRselect={setCompanyAgentId}
-                        placeholder={"שם הסוכן"}
-                        defaultValue={companyAgent?.find(
-                          (item) =>
-                            item.value ===
-                            reportStorage?.report?.insurance_case?.agent_id
-                        )}
-                      />
-                    </WrapperInput>
-
+                    <SelectComponent
+                      value={companyAgent}
+                      setRselect={setCompanyAgentId}
+                      placeholder={"שם הסוכן"}
+                      defaultValue={companyAgent?.find(
+                        (item) =>
+                          item.value ===
+                          reportStorage?.report?.insurance_case?.agent_id
+                      )}
+                    />
                     <WrapperInput>
                       <Input
                         {...register("agent_phone")}
                         as="input"
-                        type="tel"
-                        value={agentPhone?.phone}
+                        type="text"
+                        defaultValue={agentPhone?.phone}
                         placeholder={"טלפון הסוכן"}
-                        onChange={(e) =>
-                          setAgentPhone({
-                            ...agentPhone,
-                            phone: e.target.value,
-                          })
-                        }
                       />
                     </WrapperInput>
                     {/* case patches */}
@@ -584,9 +532,8 @@ function ThreeDPerson({
                         {...register("address", { required: true })}
                         as="input"
                         type="text"
-                        value={personData?.address ?? ""}
+                        defaultValue={personData?.address ?? ""}
                         placeholder={"כתובת"}
-                        readOnly={true}
                       />
                     </WrapperInput>
                     <WrapperInput>
@@ -734,7 +681,7 @@ function ThreeDPerson({
                                     setIsLoading,
                                     reportStorage?.report?.insurance_case?.id ??
                                       report?.report?.insurance_case?.id,
-                                    "images"
+                                    "photos"
                                   );
                                 }}
                                 style={{ display: "none" }}
@@ -899,160 +846,69 @@ function ThreeDPerson({
                     <div className="radio_button_group">
                       <p
                         className="radio_button_group_title"
-                        style={errors.threeDPerson && { color: "red" }}
+                        style={errors.fire_fighters && { color: "red" }}
                       >
-                        האם נגרמו נזקים לצד שלישי?
+                        האם ביקרו במקום מכבי אש?
                       </p>
                       <div className="radio_button_group_container">
-                        <div onClick={() => setThreeDPerson(true)}>
-                          <CheckBoxIcon
-                            name="threeDPerson"
-                            type="radio"
-                            label="כן"
-                            value="true"
-                            checked={
-                              reportStorage?.report?.third_person
-                                ?.threeDPerson !== undefined
-                                ? true
-                                : false
-                            }
-                            register={register}
-                            required={true}
-                          />
-                        </div>
-                        <div onClick={() => setThreeDPerson(false)}>
-                          <CheckBoxIcon
-                            name="threeDPerson"
-                            type="radio"
-                            label="לא"
-                            value="false"
-                            checked={
-                              reportStorage?.report?.third_person
-                                ?.threeDPerson === undefined
-                                ? true
-                                : false
-                            }
-                            register={register}
-                            required={true}
-                          />
-                        </div>
+                        <CheckBoxIcon
+                          name="fire_fighters"
+                          type="radio"
+                          label="כן"
+                          value="true"
+                          checked={false}
+                          register={register}
+                          required={true}
+                        />
+                        <CheckBoxIcon
+                          name="fire_fighters"
+                          type="radio"
+                          label="לא"
+                          value="false"
+                          checked={false}
+                          register={register}
+                          required={true}
+                        />
                       </div>
-                    </div>
-                    <p
-                      style={{
-                        color: "#1D3557",
-                        fontWeight: 500,
-                        fontSize: "16px",
-                      }}
-                    >
-                      אם התשובה היא כן נא למלא פרטים של צד שלישי:
-                    </p>
-                    <div
-                      style={{
-                        opacity: threeDPerson ? 1 : 0.5,
-                        pointerEvents: threeDPerson ? "auto" : "none",
-                      }}
-                    >
-                      <div>
-                        <WrapperInput>
-                          <Input
-                            style={{
-                              border:
-                                threeDPerson &&
-                                errors.first_name &&
-                                "1px solid red",
-                            }}
-                            as="input"
-                            type="text"
-                            placeholder={`שם פרטי`}
-                            {...register("first_name", {
-                              required: threeDPerson,
-                            })}
-                          />
-                        </WrapperInput>
-                        <WrapperInput>
-                          <Input
-                            style={{
-                              border:
-                                threeDPerson &&
-                                errors.last_name &&
-                                "1px solid red",
-                            }}
-                            as="input"
-                            type="text"
-                            placeholder={`שם משפחה`}
-                            {...register("last_name", {
-                              required: threeDPerson,
-                            })}
-                          />
-                        </WrapperInput>
-                        <WrapperInput>
-                          <Input
-                            style={{
-                              border:
-                                threeDPerson && errors.phone && "1px solid red",
-                            }}
-                            as="input"
-                            type="text"
-                            placeholder={`מספר טלפון ליצירת קשר`}
-                            {...register("phone", { required: threeDPerson })}
-                          />
-                        </WrapperInput>
-                        <WrapperInput>
-                          <Input
-                            {...register("address", { required: threeDPerson })}
-                            as="textarea"
-                            type="text"
-                            style={{
-                              resize: "vertical",
-                              minHeight: "200px",
-                              maxHeight: "400px",
-                              height: "280px",
-                              border:
-                                threeDPerson &&
-                                errors.address &&
-                                "1px solid red",
-                            }}
-                            placeholder={
-                              "מקום הנזק                                (אם שונה מכתובת המגורים                  שמולאה מעלה)"
-                            }
-                          />
-                        </WrapperInput>
-                        <WrapperInput>
-                          <Input
-                            {...register("damage_info", {
-                              required: threeDPerson,
-                            })}
-                            as="textarea"
-                            type="text"
-                            style={{
-                              resize: "vertical",
-                              minHeight: "200px",
-                              maxHeight: "400px",
-                              height: "280px",
-                              border:
-                                threeDPerson &&
-                                errors.damage_info &&
-                                "1px solid red",
-                            }}
-                            placeholder={`פרט בקצרה את הנזק שנגרם              לרכוש צד ג'`}
-                          />
-                        </WrapperInput>{" "}
-                      </div>
-                    </div>
-                    <div
-                      style={{
-                        maxWidth: "300px",
-                        color: "#1D3557",
-                        fontWeight: 500,
-                      }}
-                      className="placeholder_paragraff"
-                    >
-                      <p style={{ width: "350px" }}>
-                        התאם לסעיף 68 לחוק חוזה הביטוח התשמ":א ,1981 יישלח אלייך
-                        מכתב להסכמתך בנזקי צד ג'. עלייך יהיה להחזירו לחברה חתום
-                        וכמו כן, לשלם השתתפות עצמית בהתאם לתנאי הביטוח
+                      <p
+                        style={{
+                          color: "#1D3557",
+                          fontWeight: 500,
+                          fontSize: "16px",
+                          marginBottom: "15px",
+                        }}
+                      >
+                        (נדרש יהיה לצרף אישור מכבי אש בהמשך)
                       </p>
+                    </div>
+
+                    <div className="radio_button_group">
+                      <p
+                        className="radio_button_group_title"
+                        style={errors.police && { color: "red" }}
+                      >
+                        האם הודעת למשטרה?
+                      </p>
+                      <div className="radio_button_group_container">
+                        <CheckBoxIcon
+                          name="police"
+                          type="radio"
+                          label="כן"
+                          value="true"
+                          checked={false}
+                          register={register}
+                          required={true}
+                        />
+                        <CheckBoxIcon
+                          name="police"
+                          type="radio"
+                          label="לא"
+                          value="false"
+                          checked={false}
+                          register={register}
+                          required={true}
+                        />
+                      </div>
                     </div>
                   </>
                 )}
@@ -1083,9 +939,7 @@ function ThreeDPerson({
                         placeholder={"סכום התביעה"}
                       />
                     </WrapperInput>
-                    <Paragraf
-                      style={{ marginBottom: "30px", marginTop: "-10px" }}
-                    >
+                    <Paragraf style={{ marginBottom: "20px" }}>
                       מהווה את מלוא הנזק שנגרם לי
                     </Paragraf>
                     <Paragraf>
@@ -1096,10 +950,10 @@ function ThreeDPerson({
                       style={{
                         fontWeight: 600,
                         color: "#1D3557",
-                        marginTop: "25px",
+                        marginTop: "20px",
                       }}
                     >
-                      שם המבוטח
+                      תאריך
                     </p>
                     <WrapperInput>
                       <Input
@@ -1140,7 +994,7 @@ function ThreeDPerson({
                       type="submit"
                       className="step_form_content__footer__button__button"
                     >
-                      {currentPage === 4 ? "סיום" : "המשך לשלב הבא"}
+                      {currentPage > 3 ? "סיום" : "המשך לשלב הבא"}
                     </Button>
                     <div
                       className="back__step__"
@@ -1159,7 +1013,6 @@ function ThreeDPerson({
           </div>
         )}
       </div>
-
       <FormBefore
         isReset={isReset}
         currentPage={currentPage}
@@ -1168,15 +1021,15 @@ function ThreeDPerson({
         firstPage={5}
         storageName={reportStorageName}
         storagePage={isActivePage}
-        suppliyerType={6}
+        namePage={namePage}
+        suppliyerType={7}
       />
-
       {(currentPage === 6 || iscurrent) && (
         <div className="event_received_container">
           <Modal>
             <ModalContent>
               <ModalHeader>
-                <ModalHeaderIconWrapper style={{ direction: "ltr" }}>
+                <ModalHeaderIconWrapper>
                   <img src={ModalIcon} alt="" />
                   <ModalHeaderTitle>דיווח אירוע התקבל</ModalHeaderTitle>
                 </ModalHeaderIconWrapper>
@@ -1184,11 +1037,11 @@ function ThreeDPerson({
               <ModalBody style={{ marginBottom: "0" }}>
                 <p>מספר האירוע הוא:</p>
                 <h1>
-                  {report?.report?.insurance_case?.id ??
-                    reportStorage?.report?.insurance_case?.id}
+                  {reportStorage?.report?.insurance_case?.id ??
+                    report?.report?.insurance_case?.id}
                 </h1>
                 <p style={{ marginBottom: "40px" }}>
-                  והפקדת הרכב במוסך לצורך <br /> במהלך 24 השעות הקרובות
+                  הטופס נשלח לשמאי <br /> עדכון ישלח בהקדם
                 </p>
                 {iscurrent && (
                   <Button onClick={() => setIscurrent(false)}>נמשך</Button>
@@ -1198,6 +1051,8 @@ function ThreeDPerson({
                     if (currentPage === 6) {
                       localStorage.removeItem(reportStorageName);
                       localStorage.removeItem(isActivePage);
+                      report = { report: {} };
+                      setDrawing(null);
                     } else {
                       postRequest(
                         "/insurance-case/messages/create",
@@ -1220,7 +1075,6 @@ function ThreeDPerson({
                         })
                       );
                     }
-
                     navigate("/" + localStorage.getItem("role") ?? "customer");
                   }}
                 >
@@ -1232,9 +1086,8 @@ function ThreeDPerson({
         </div>
       )}
 
-      <Footer />
       <PdfModal
-        event_type={"צד שלישי"}
+        event_type={"אש"}
         data={reportStorage?.report}
         open={openPdf}
         setOpen={setOpenPdf}
@@ -1244,4 +1097,4 @@ function ThreeDPerson({
   );
 }
 
-export default ThreeDPerson;
+export default FireDamage;
