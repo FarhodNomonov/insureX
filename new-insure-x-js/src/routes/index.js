@@ -1,175 +1,175 @@
 import React from "react";
 import Home from "../pages/customer/home";
-import ReportPage from "../pages/customer/report";
+// import ReportPage from "../pages/customer/report";
 import SignInCustomer from "../pages/customer/register";
 import LoginCustomer from "../pages/customer/login";
 import LoginAppraiser from "../pages/appraiser/login";
 import SignInAgent from "../pages/agent/register";
 import LoginAgent from "../pages/agent/login";
-import MessagesCustomer from "../pages/customer/messages";
-import StatusCustomer from "../pages/customer/status";
-import EventsCustomer from "../pages/customer/events";
-import EventDocsCustomer from "../pages/customer/event-docs";
+// import MessagesCustomer from "../pages/customer/messages";
+// import StatusCustomer from "../pages/customer/status";
+// import EventsCustomer from "../pages/customer/events";
+// import EventDocsCustomer from "../pages/customer/event-docs";
 import HomeAgent from "../pages/agent/home";
 import WithFooterComponent from "../components/Ui/WithFooter";
-import Accident from "../pages/customer/accident";
-import Burglarys from "../pages/customer/burglarys";
-import CarBurglary from "../pages/customer/carBurg";
-import FireDamage from "../pages/customer/fireDamage";
-import NatureHome from "../pages/customer/natureHome";
-import NatureOffice from "../pages/customer/natureOffice";
-import ThreeDPerson from "../pages/customer/threeDPerson";
-import WaterDamage from "../pages/customer/waterDamage";
-import MessagesAgent from "../pages/agent/Message/index";
+// import Accident from "../pages/customer/accident";
+// import Burglarys from "../pages/customer/burglarys";
+// import CarBurglary from "../pages/customer/carBurg";
+// import FireDamage from "../pages/customer/fireDamage";
+// import NatureHome from "../pages/customer/natureHome";
+// import NatureOffice from "../pages/customer/natureOffice";
+// import ThreeDPerson from "../pages/customer/threeDPerson";
+// import WaterDamage from "../pages/customer/waterDamage";
+import MessagesAgent from "../pages/agent/Message";
 
 const CustomerRoutes = [
   {
     path: "/",
     element: <Home />,
   },
-  {
-    path: "/report",
-    element: <ReportPage />,
-  },
-  {
-    path: "/messages",
-    element: <MessagesCustomer />,
-  },
-  {
-    path: "/status",
-    element: <StatusCustomer />,
-  },
-  {
-    path: "/events",
-    element: <EventsCustomer />,
-  },
-  {
-    path: "/events/:id",
-    element: <EventsCustomer />,
-  },
-  {
-    path: "/event-docs/:id",
-    element: <EventDocsCustomer />,
-  },
-  {
-    path: "/accident",
-    element: <Accident />,
-  },
-  {
-    path: "/carburglary",
-    element: <CarBurglary />,
-  },
-  {
-    path: "/burglary-home",
-    element: (
-      <Burglarys
-        propertyId={2}
-        typeId={6}
-        reportStorageName={"burglaryHome"}
-        isActivePage={"burglaryHomePage"}
-        pageName={"פריצה / גניבה"}
-      />
-    ),
-  },
-  {
-    path: "/burglary-office",
-    element: (
-      <Burglarys
-        propertyId={3}
-        typeId={6}
-        reportStorageName={"burglaryOffice"}
-        isActivePage={"burglaryOfficePage"}
-        pageName={"פריצה / גניבה"}
-      />
-    ),
-  },
-  {
-    path: "/fire-damage-home",
-    element: (
-      <FireDamage
-        headerTitle={"פתיחת אירוע רכוש - אש"}
-        propertyId={2}
-        typeId={4}
-        reportStorageName={"fireDamageHome"}
-        isActivePage={"fireHomePage"}
-        pageName={"אש"}
-      />
-    ),
-  },
-  {
-    path: "/fire-damage-office",
-    element: (
-      <FireDamage
-        headerTitle={"פתיחת אירוע רכוש - אש"}
-        propertyId={3}
-        typeId={4}
-        reportStorageName={"fireDamageOffice"}
-        isActivePage={"fireOfficePage"}
-        pageName={"אש"}
-      />
-    ),
-  },
-  {
-    path: "/nature-damage-home",
-    element: <NatureHome />,
-  },
-  {
-    path: "/nature-damage-office",
-    element: <NatureOffice />,
-  },
-  {
-    path: "/person-3d-home",
-    element: (
-      <ThreeDPerson
-        propertyId={2}
-        typeId={7}
-        isActivePage="person3dHomePage"
-        reportStorageName="person-3d-home"
-        pageName={"צד שלישי"}
-      />
-    ),
-  },
-  {
-    path: "/person-3d-office",
-    element: (
-      <ThreeDPerson
-        propertyId={3}
-        typeId={7}
-        isActivePage="person3dOfficePage"
-        reportStorageName="person-3d-office"
-        pageName={"צד שלישי"}
-      />
-    ),
-  },
-  {
-    path: "/water-damage-home",
-    element: (
-      <WaterDamage
-        headerTitle={"פתיחת אירוע רכוש - נזקי מים "}
-        propertyId={3}
-        typeId={2}
-        reportStorageName={"waterDamageOffice"}
-        isActivePage={"waterOfficePage"}
-        pageName={"מים"}
-        noFilterSdp
-      />
-    ),
-  },
-  {
-    path: "/water-damage-office",
-    element: (
-      <WaterDamage
-        headerTitle={"אירוע אחר"}
-        propertyId={3}
-        typeId={8}
-        reportStorageName={"OtherOffice"}
-        isActivePage={"OtherOfficePage"}
-        pageName={"אחר"}
-        suppliyerType={8}
-        noFilterSdp
-      />
-    ),
-  },
+  // {
+  //   path: "/report",
+  //   element: <ReportPage />,
+  // },
+  // {
+  //   path: "/messages",
+  //   element: <MessagesCustomer />,
+  // },
+  // {
+  //   path: "/status",
+  //   element: <StatusCustomer />,
+  // },
+  // {
+  //   path: "/events",
+  //   element: <EventsCustomer />,
+  // },
+  // {
+  //   path: "/events/:id",
+  //   element: <EventsCustomer />,
+  // },
+  // {
+  //   path: "/event-docs/:id",
+  //   element: <EventDocsCustomer />,
+  // },
+  // {
+  //   path: "/accident",
+  //   element: <Accident />,
+  // },
+  // {
+  //   path: "/carburglary",
+  //   element: <CarBurglary />,
+  // },
+  // {
+  //   path: "/burglary-home",
+  //   element: (
+  //     <Burglarys
+  //       propertyId={2}
+  //       typeId={6}
+  //       reportStorageName={"burglaryHome"}
+  //       isActivePage={"burglaryHomePage"}
+  //       pageName={"פריצה / גניבה"}
+  //     />
+  //   ),
+  // },
+  // {
+  //   path: "/burglary-office",
+  //   element: (
+  //     <Burglarys
+  //       propertyId={3}
+  //       typeId={6}
+  //       reportStorageName={"burglaryOffice"}
+  //       isActivePage={"burglaryOfficePage"}
+  //       pageName={"פריצה / גניבה"}
+  //     />
+  //   ),
+  // },
+  // {
+  //   path: "/fire-damage-home",
+  //   element: (
+  //     <FireDamage
+  //       headerTitle={"פתיחת אירוע רכוש - אש"}
+  //       propertyId={2}
+  //       typeId={4}
+  //       reportStorageName={"fireDamageHome"}
+  //       isActivePage={"fireHomePage"}
+  //       pageName={"אש"}
+  //     />
+  //   ),
+  // },
+  // {
+  //   path: "/fire-damage-office",
+  //   element: (
+  //     <FireDamage
+  //       headerTitle={"פתיחת אירוע רכוש - אש"}
+  //       propertyId={3}
+  //       typeId={4}
+  //       reportStorageName={"fireDamageOffice"}
+  //       isActivePage={"fireOfficePage"}
+  //       pageName={"אש"}
+  //     />
+  //   ),
+  // },
+  // {
+  //   path: "/nature-damage-home",
+  //   element: <NatureHome />,
+  // },
+  // {
+  //   path: "/nature-damage-office",
+  //   element: <NatureOffice />,
+  // },
+  // {
+  //   path: "/person-3d-home",
+  //   element: (
+  //     <ThreeDPerson
+  //       propertyId={2}
+  //       typeId={7}
+  //       isActivePage="person3dHomePage"
+  //       reportStorageName="person-3d-home"
+  //       pageName={"צד שלישי"}
+  //     />
+  //   ),
+  // },
+  // {
+  //   path: "/person-3d-office",
+  //   element: (
+  //     <ThreeDPerson
+  //       propertyId={3}
+  //       typeId={7}
+  //       isActivePage="person3dOfficePage"
+  //       reportStorageName="person-3d-office"
+  //       pageName={"צד שלישי"}
+  //     />
+  //   ),
+  // },
+  // {
+  //   path: "/water-damage-home",
+  //   element: (
+  //     <WaterDamage
+  //       headerTitle={"פתיחת אירוע רכוש - נזקי מים "}
+  //       propertyId={3}
+  //       typeId={2}
+  //       reportStorageName={"waterDamageOffice"}
+  //       isActivePage={"waterOfficePage"}
+  //       pageName={"מים"}
+  //       noFilterSdp
+  //     />
+  //   ),
+  // },
+  // {
+  //   path: "/water-damage-office",
+  //   element: (
+  //     <WaterDamage
+  //       headerTitle={"אירוע אחר"}
+  //       propertyId={3}
+  //       typeId={8}
+  //       reportStorageName={"OtherOffice"}
+  //       isActivePage={"OtherOfficePage"}
+  //       pageName={"אחר"}
+  //       suppliyerType={8}
+  //       noFilterSdp
+  //     />
+  //   ),
+  // },
 ];
 
 const AgentRoutes = [
