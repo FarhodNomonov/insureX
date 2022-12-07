@@ -7,7 +7,7 @@ import {
   ModalHeader,
   ModalHeaderIconWrapper,
   ModalHeaderTitle,
-} from "../../../pages/customer/register/style";
+} from "../../../pages/customer/RegisterPage/style";
 import DrawerBg from "../../../assets/img/auto_bg.svg";
 import { Tach } from "../../../components/icon";
 

@@ -1,5 +1,5 @@
 import React, { useRef, useInsertionEffect, useEffect } from "react";
-import { Modal } from "../../../pages/customer/register/style";
+import { Modal } from "../../../pages/customer/RegisterPage/style";
 import { getFormData, getRequest, PostPDF } from "../../../utils/requestApi";
 
 function PdfModal({ data, open, event_type, sign_picture = null }) {

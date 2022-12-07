@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import Button from "../../components/Ui/Button/Button";
 import { AccordArrowIcon, Phone, Search } from "../../components/icon";
 import { SearchWrapper } from "../../pages/customer/messages/style";
-import { WrapperInput } from "../../pages/customer/register/style";
+import { WrapperInput } from "../../pages/customer/RegisterPage/style";
 import { SelectComponent } from "../../components/Ui/FormElements/FormElements";
 import {
   CityCache,

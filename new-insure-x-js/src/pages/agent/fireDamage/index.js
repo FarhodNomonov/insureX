@@ -21,7 +21,7 @@ import {
   ModalHeader,
   ModalHeaderIconWrapper,
   ModalHeaderTitle,
-} from "../register/style";
+} from "../RegisterPage/style";
 import ModalIcon from "../../../assets/img/modalIcon.svg";
 import {
   getFormData,

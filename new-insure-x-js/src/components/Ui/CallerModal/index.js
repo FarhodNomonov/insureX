@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Modal } from "../../../pages/customer/register/style";
+import { Modal } from "../../../pages/customer/RegisterPage/style";
 import Button from "components/Ui/Button/Button";
 import { useNavigate } from "react-router-dom";
 import {

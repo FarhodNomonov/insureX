@@ -33,7 +33,7 @@ import {
   ModalBody,
   ModalContent,
   ModalHeaderIconWrapper,
-} from "../../pages/customer/register/style";
+} from "../../pages/customer/RegisterPage/style";
 import Button from "../../components/Ui/Button/Button";
 import ModalIcon from "../../assets/img/modalIcon.svg";
 import { SearchWrapper } from "../../pages/customer/messages/style";
