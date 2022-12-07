@@ -60,40 +60,53 @@ function Messages() {
             <Search />
           </SearchWrapper>
           {[...clientMessage]
+            .filter((item) => {
+              const array = item?.ms_text ?? "[]";
+              const text = array.includes("[") && array.includes("]");
+              return text;
+            })
             ?.sort(function (a, b) {
               return (
                 moment(b.date_time).format("X") -
                 moment(a.date_time).format("X")
               );
             })
-            .map((item, i) => (
-              <MessagesWrapper key={i}>
-                <MessageBody>
-                  <MessageHeader>
-                    <p className="text__message">{item?.ms_text}</p>
-                    <div className="text__message">פרטי הודעה:</div>
-                  </MessageHeader>
-                  <MessageHeader>
-                    <p
-                      className="text__message"
-                      style={{
-                        direction: "ltr",
-                      }}
-                    >
-                      {moment(new Date(item?.date_time)).format(
-                        "DD MMMM YYYY , LTS"
-                      )}
-                    </p>
-                    <div className="__message_staus__icon">
-                      {item?.messageNew ? <ReadSms /> : <Unread />}
-                    </div>
-                  </MessageHeader>
-                  <NavLink to={`/events/${item?.is_case_id}`}>
-                    <Button>{"פרטי האירוע"}</Button>
-                  </NavLink>
-                </MessageBody>
-              </MessagesWrapper>
-            ))}
+            .map((item, i) => {
+              const array = item?.ms_text ?? "[]";
+              const text = JSON.parse(array);
+              return (
+                <MessagesWrapper key={i}>
+                  <MessageBody>
+                    <MessageHeader>
+                      <div className="text__message">
+                        {text?.map((item, i) => (
+                          <div key={i}>{" " + item + " "}</div>
+                        ))}
+                      </div>
+                      <div className="text__message">פרטי הודעה:</div>
+                    </MessageHeader>
+                    <MessageHeader>
+                      <p
+                        className="text__message"
+                        style={{
+                          direction: "ltr",
+                        }}
+                      >
+                        {moment(new Date(item?.date_time)).format(
+                          "DD MMMM YYYY , LTS"
+                        )}
+                      </p>
+                      <div className="__message_staus__icon">
+                        {item?.messageNew ? <ReadSms /> : <Unread />}
+                      </div>
+                    </MessageHeader>
+                    <NavLink to={`/customer/my-docs/${item?.is_case_id}`}>
+                      <Button>{"פרטי האירוע"}</Button>
+                    </NavLink>
+                  </MessageBody>
+                </MessagesWrapper>
+              );
+            })}
         </MessagesContainer>
       </div>
       <Footer />

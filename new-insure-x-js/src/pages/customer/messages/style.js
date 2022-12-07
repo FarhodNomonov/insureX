@@ -74,12 +74,11 @@ export const MessageHeader = styled.div`
     text-align: right;
     color: #000000;
     padding-right: 10px;
-    direction: ltr;
-  }
-  p.text__message {
-    white-space: pre-wrap;
-    background-color: white;
-    -webkit-user-modify: read-only;
-    word-wrap: break-word;
+    display: flex;
+    flex-wrap: wrap;
+
+    div {
+      margin: 0 3px;
+    }
   }
 `;
