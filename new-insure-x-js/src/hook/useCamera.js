@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect } from "react";
+import { CloseBtn } from "../components/icon";
 import { onSavePhoto } from "../utils/requestApi";
 import { StyledCameraContainer } from "./camera.styled";
 
@@ -13,7 +14,7 @@ function UseCamera({
   setIsTakedData,
   ...props
 }) {
-  const [isFileName, setIsFileName] = useState("image");
+  const [isFileName, setIsFileName] = useState(null);
   const [isSave, setIsSave] = useState(false);
   let videoRef = useRef(null);
   let canvasRef = useRef(null);
@@ -47,6 +48,7 @@ function UseCamera({
       video: {
         width: { min: 640, ideal: 1280, max: 1920 },
         height: { min: 480, ideal: 720, max: 1080 },
+        facingMode: "environment",
       },
     };
     await navigator.mediaDevices
@@ -82,10 +84,10 @@ function UseCamera({
           isTakedData &&
           setIsTakedData([
             ...isTakedData,
-            new File([blob], `${isFileName}.png`, { type: "image/png" }),
+            new File([blob], `${isFileName ?? ""}.png`, { type: "image/png" }),
           ]);
         e.target.files = [
-          new File([blob], `${isFileName}.png`, { type: "image/png" }),
+          new File([blob], `${isFileName ?? ""}.png`, { type: "image/png" }),
         ];
         onSavePhoto(e, setIsLoading, id, "photos");
       }
@@ -102,7 +104,7 @@ function UseCamera({
       style={isOpen ? {} : { display: "none" }}
     >
       <div className="camera">
-        <div className="video">
+        <div className={"environment" === "user" ? "video user" : "video"}>
           <button
             type="button"
             className="back"
@@ -111,16 +113,17 @@ function UseCamera({
               handleStopVideo();
             }}
           >
-            גב
+            <CloseBtn />
           </button>
 
-          <video ref={videoRef} />
+          <video ref={videoRef} playsInline />
           <canvas ref={canvasRef} />
         </div>
         <div className="btn_camera">
           {isSave && (
             <input
               type="text"
+              placeholder={"שם התמונה"}
               value={isFileName}
               onChange={(e) => setIsFileName(e.target.value)}
             />
@@ -131,9 +134,16 @@ function UseCamera({
               setIsSave(true);
               handleTakePhoto();
             }}
+            className="btn_save"
           >
-            צלם תמונה
+            {isSave ? "שמור" : "ללכוד"}
           </button>
+          {/* <button type="button" onClick={() => setCameraID("user")}>
+            Front
+          </button>
+          <button type="button" onClick={() => setCameraID("environment")}>
+            Back
+          </button> */}
         </div>
       </div>
     </StyledCameraContainer>

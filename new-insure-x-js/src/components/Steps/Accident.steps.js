@@ -84,7 +84,7 @@ export const FirstStep = ({
   }, [personData?.insurance_company_persons_id]);
   const watchedValueCompany = watch("insurance_company_id")?.value;
 
-  React.useEffect(() => {
+  React.useInsertionEffect(() => {
     if (!watchedValueCompany) return setCompanyFiltered(company);
     setCompanyFiltered(
       company?.filter((fs) =>
@@ -977,13 +977,13 @@ export const FormBeforeSubmit = ({
   const [inputText, setInputText] = React.useState("");
   const [isSdpPhone, setIsSdpPhone] = React.useState(null);
 
-  React.useEffect(() => {
+  React.useInsertionEffect(() => {
     getRequest("/sdp?delete=false").then(({ message }) => {
       setSdpDataFiltered(message?.sdp);
     });
   }, []);
 
-  React.useEffect(() => {
+  React.useInsertionEffect(() => {
     if (cityId) {
       if (regionId) {
         setSdpData(

@@ -7,7 +7,6 @@ import { SearchWrapper } from "../../pages/customer/messages/style";
 import { WrapperInput } from "../../pages/customer/RegisterPage/style";
 import { SelectComponent } from "../../components/Ui/FormElements/FormElements";
 import {
-  CityCache,
   RegionCache,
   patchRequest,
   getFormData,
@@ -18,7 +17,7 @@ import { Message } from "../../utils/messages";
 export default function FormBeforeSubmit({
   currentPage,
   setCurrentPage,
-  setIsLoading,
+  setIsLoading = () => {},
   firstPage,
   secondPage,
   storageName,
@@ -36,56 +35,103 @@ export default function FormBeforeSubmit({
 
   const { hash } = useLocation();
   const navigate = useNavigate();
-  const GlobalState = useSelector((state) => state);
+  const GlobalState = useSelector((s) => s);
   const [insidentCompany, setInsidentCompany] = React.useState(false);
   const [sdpData, setSdpData] = React.useState([]);
   const [cityId, setCityId] = React.useState(null);
   const [regionId, setRegionId] = React.useState(null);
   const [inputText, setInputText] = React.useState("");
   const [isSdpPhone, setIsSdpPhone] = React.useState(false);
+  const [cityData, setCityData] = React.useState(
+    GlobalState?.cityRegion?.city?.map((item) => ({
+      value: item?.id,
+      label: item?.city_name,
+      region_id: item?.region_id,
+    }))
+  );
   const CaseID = JSON.parse(localStorage.getItem(storageName) ?? "{}")?.report
     ?.insurance_case?.id;
   const reportStorage = JSON.parse(localStorage.getItem(storageName) ?? "{}");
-
-  const Person = JSON.parse(localStorage.getItem("insured_person"));
+  const Person = JSON.parse(localStorage.getItem("insured_person") ?? "{}");
 
   React.useInsertionEffect(() => {
     if (cityId) {
       if (regionId) {
         setSdpData(
           GlobalState?.sdp
-            ?.filter((fs) => fs.supplier_type_ids?.includes(suppliyerType))
+            ?.filter((fs) =>
+              fs?.supplier_type_ids?.some(
+                (v) => suppliyerType?.indexOf(v) !== -1
+              )
+            )
             ?.filter(
-              (resp) => resp.city_id === cityId && resp.region_id === regionId
+              (resp) =>
+                Number(resp.city_id) === Number(cityId) &&
+                Number(resp.region_id) === Number(regionId)
             )
         );
       } else {
         setSdpData(
           GlobalState?.sdp
-            ?.filter((fs) => fs.supplier_type_ids?.includes(suppliyerType))
-            ?.filter((resp) => resp.city_id === cityId)
+            ?.filter((fs) =>
+              fs?.supplier_type_ids?.some(
+                (v) => suppliyerType?.indexOf(v) !== -1
+              )
+            )
+            ?.filter((resp) => Number(resp.city_id) === Number(cityId))
         );
       }
     }
     if (regionId) {
+      setCityData(
+        GlobalState?.cityRegion?.city
+          ?.filter((city) => city?.region_id === regionId)
+          ?.map((resp) => ({
+            value: resp?.id,
+            label: resp?.city_name,
+            region_id: regionId,
+          }))
+      );
       if (cityId) {
         setSdpData(
-          GlobalState?.sdp?.filter(
-            (resp) => resp.city_id === cityId && resp.region_id === regionId
-          )
+          GlobalState?.sdp
+            ?.filter((fs) =>
+              fs?.supplier_type_ids?.some(
+                (v) => suppliyerType?.indexOf(v) !== -1
+              )
+            )
+            ?.filter(
+              (resp) =>
+                Number(resp.city_id) === Number(cityId) &&
+                Number(resp.region_id) === Number(regionId)
+            )
         );
       } else {
         setSdpData(
-          GlobalState?.sdp?.filter((resp) => resp.region_id === regionId)
+          GlobalState?.sdp
+            ?.filter((fs) =>
+              fs?.supplier_type_ids?.some(
+                (v) => suppliyerType?.indexOf(v) !== -1
+              )
+            )
+            ?.filter((resp) => Number(resp.region_id) === Number(regionId))
         );
       }
-    } else if (!cityId && !regionId)
+    } else if (!cityId && !regionId) {
+      setCityData(
+        GlobalState?.cityRegion?.city?.map((item) => ({
+          value: item?.id,
+          label: item?.city_name,
+          region_id: item?.region_id,
+        }))
+      );
       setSdpData(
         GlobalState?.sdp?.filter((fs) =>
-          fs.supplier_type_ids?.includes(suppliyerType)
+          fs?.supplier_type_ids?.some((v) => suppliyerType?.indexOf(v) !== -1)
         )
       );
-  }, [cityId, regionId, GlobalState?.sdp]);
+    }
+  }, [cityId, regionId, GlobalState, suppliyerType]);
 
   React.useInsertionEffect(() => {
     document.getElementById("root").scrollTo({
@@ -114,13 +160,28 @@ export default function FormBeforeSubmit({
     var lowerCase = e.target.value.toLowerCase();
     setInputText(lowerCase);
   };
-  const SdpPatch = (id) => {
-    if (CaseID && id) {
-      setIsLoading(true);
-      patchRequest(`/insurance-case/sdp/${CaseID}/${id}`)
-        .then((__respons) => {
-          if (!__respons.error) {
+  const SdpPatch = React.useCallback(
+    (id) => {
+      if (CaseID && id) {
+        setIsLoading(true);
+        patchRequest(
+          `/insurance-case/${CaseID}`,
+          getFormData({
+            sdp_id: id,
+            agent_id: reportStorage?.report?.insurance_case?.agent_id,
+          })
+        )
+          .then(({ message }) => {
             setIsLoading(false);
+
+            const AppraiserComp = GlobalState?.appraiserCmp?.find(
+              (app) =>
+                Number(app?.id) ===
+                Number(
+                  message?.insurance_case?.insured_event?.appraisal_company_id
+                )
+            );
+
             postRequest(
               "/insurance-case/messages/create",
               getFormData({
@@ -133,6 +194,14 @@ export default function FormBeforeSubmit({
                     hash.split("#")[1],
                   pageName,
                   Person?.first_name
+                ),
+                ms_spec_text: Message.msSdp31(
+                  Person?.first_name,
+                  reportStorage?.report?.insurance_case?.id ??
+                    hash.split("#")[1],
+                  pageName,
+                  GlobalState?.sdp?.find((res) => Number(res.id) === Number(id))
+                    ?.first_name
                 ),
                 ms_agent_text: Message.msAgent30(
                   GlobalState?.sdp?.find((res) => Number(res.id) === Number(id))
@@ -156,44 +225,78 @@ export default function FormBeforeSubmit({
                 date_time: new Date(),
               })
             );
-          }
-        })
-        .catch(() => {
-          setIsLoading(false);
-        });
-    }
-  };
+
+            postRequest(
+              "/insurance-case/messages/create",
+              getFormData({
+                type: "web-client",
+                date_time: new Date(),
+                ms_agent_text: Message.msAgent41(
+                  AppraiserComp?.appraisal_company_name,
+                  GlobalState?.agents?.find(
+                    (ag) =>
+                      Number(ag.id) ===
+                      Number(message?.insurance_case?.agent_id)
+                  )?.first_name
+                ),
+                agent_id: message?.insurance_case?.agent_id,
+                is_case_id: message?.insurance_case?.id,
+                id: Math.floor(Math.random() * 100),
+                admin_type: true,
+                is_create_case: true,
+                user_type: "event_create",
+                user_name: "new event_created",
+              })
+            );
+          })
+          .catch(() => {
+            setIsLoading(false);
+          });
+      }
+    },
+    [CaseID, reportStorage, pageName, GlobalState, Person, hash, setIsLoading]
+  );
 
   return (
     <>
       {currentPage === firstPage && (
         <div className="form_before">
+          <h1>
+            {[2, 4].includes(suppliyerType) ? "בחר מוסך" : "בחר בעל מקצוע"}
+          </h1>
           <SearchWrapper>
             <input type="text" onChange={inputHandler} placeholder="חיפוש" />
             <Search />
           </SearchWrapper>
           <WrapperInput style={{ margin: "10px 0" }}>
+            <WrapperInput style={{ margin: "10px 0" }}>
+              <SelectComponent
+                name={`region_id`}
+                placeholder="אזור"
+                value={RegionCache() ?? []}
+                setRselect={setRegionId}
+                defaultValue={RegionCache().filter(
+                  (item) => item.value === regionId
+                )}
+                setValue={RegionCache().filter(
+                  (item) => item.value === regionId
+                )}
+              />
+            </WrapperInput>
             <SelectComponent
               name={`city_id`}
-              placeholder="אזור"
-              value={CityCache() ?? []}
+              placeholder="עיר"
+              value={
+                cityData?.filter((item) =>
+                  regionId ? Number(item.region_id) === Number(regionId) : true
+                ) ?? []
+              }
               setRselect={setCityId}
-              defaultValue={CityCache().filter((item) => item.value === cityId)}
-              setValue={CityCache().filter((item) => item.value === cityId)}
+              defaultValue={cityData?.filter((item) => item.value === cityId)}
+              setValue={cityData?.filter((item) => item.value === cityId)}
             />
           </WrapperInput>
-          <WrapperInput style={{ margin: "10px 0" }}>
-            <SelectComponent
-              name={`region_id`}
-              placeholder="אזור"
-              value={RegionCache() ?? []}
-              setRselect={setRegionId}
-              defaultValue={RegionCache().filter(
-                (item) => item.value === regionId
-              )}
-              setValue={RegionCache().filter((item) => item.value === regionId)}
-            />
-          </WrapperInput>
+
           {(cityId || regionId) && (
             <Button
               style={{
@@ -277,11 +380,15 @@ export default function FormBeforeSubmit({
               <SelectComponent
                 name={`city_id`}
                 placeholder="אזור"
-                value={CityCache() ?? []}
+                value={
+                  cityData?.filter((item) =>
+                    regionId
+                      ? Number(item.region_id) === Number(regionId)
+                      : true
+                  ) ?? []
+                }
                 setRselect={setCityId}
-                defaultValue={CityCache().filter(
-                  (item) => item.value === cityId
-                )}
+                defaultValue={cityData?.filter((item) => item.value === cityId)}
               />
             </WrapperInput>
             <WrapperInput style={{ margin: "10px 0" }}>
