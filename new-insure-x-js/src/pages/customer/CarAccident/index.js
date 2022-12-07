@@ -28,7 +28,6 @@ import {
   FormBeforeSubmit,
 } from "../../../components/Steps/Accident.steps";
 import PdfModal from "../../../components/Ui/Pdf";
-import { messageCar } from "../../../utils/messages";
 import { allCities } from "../../../utils/static";
 
 let report = {
@@ -462,7 +461,7 @@ function Accident() {
             console.clear();
             console.log(report);
             localStorage.setItem("accident", JSON.stringify(report));
-            messageCar(message?.insurance_case?.id, "car");
+            //messageCar(message?.insurance_case?.id, "car");
           }
         );
       }

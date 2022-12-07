@@ -214,7 +214,7 @@ function NatureHome() {
             };
             console.log(report);
             localStorage.setItem("natureDamageHome", JSON.stringify(report));
-            messageOther(message?.insurance_case?.id, "other");
+            //messageOther(message?.insurance_case?.id, "other");
           }
         );
       }

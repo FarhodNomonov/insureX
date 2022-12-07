@@ -39,7 +39,7 @@ import { onSavePhoto } from "../../../utils/requestApi";
 import FormBefore from "../../../components/Steps/FormBefore";
 import PdfModal from "../../../components/Ui/Pdf";
 import UseCamera from "../../../hook/useCamera";
-import { Message, messageOther } from "../../../utils/messages";
+import { Message } from "../../../utils/messages";
 
 let report = { report: {} };
 
@@ -225,7 +225,7 @@ function Waterdamage({
             };
             console.log(report);
             localStorage.setItem(reportStorageName, JSON.stringify(report));
-            messageOther(message?.insurance_case?.id, "other");
+            //messageOther(message?.insurance_case?.id, "other");
           }
         );
       }

@@ -200,7 +200,7 @@ function FireDamage({
               console.log(report);
               localStorage.setItem(reportStorageName, JSON.stringify(report));
               setCurrentPage(currentPage + 1);
-              messageOther(message?.insurance_case?.id, "other");
+              //messageOther(message?.insurance_case?.id, "other");
             }
           }
         );

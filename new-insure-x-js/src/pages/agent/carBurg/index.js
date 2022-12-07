@@ -307,7 +307,7 @@ function StepForm() {
           };
           console.log(report);
           localStorage.setItem("car_burglary", JSON.stringify(report));
-          messageCar(message?.insurance_case?.id, "car");
+          //messageCar(message?.insurance_case?.id, "car");
         }
       );
     }

@@ -224,7 +224,7 @@ function Waterdamage({
             };
             console.log(report);
             localStorage.setItem(reportStorageName, JSON.stringify(report));
-            messageOther(message?.insurance_case?.id, "other");
+            //messageOther(message?.insurance_case?.id, "other");
           }
         );
       }

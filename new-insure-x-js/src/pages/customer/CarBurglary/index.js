@@ -43,7 +43,7 @@ import FormBefore from "../../../components/Steps/FormBefore";
 import PdfModal from "../../../components/Ui/Pdf";
 import UseCamera from "../../../hook/useCamera";
 import { CityCache } from "../../../utils/requestApi";
-import { Message, messageCar } from "../../../utils/messages";
+import { Message } from "../../../utils/messages";
 
 import { SelectComponent } from "../../../components/Ui/FormElements/FormElements";
 
@@ -308,7 +308,7 @@ function StepForm() {
           };
           console.log(report);
           localStorage.setItem("car_burglary", JSON.stringify(report));
-          messageCar(message?.insurance_case?.id, "car");
+          //messageCar(message?.insurance_case?.id, "car");
         }
       );
     }

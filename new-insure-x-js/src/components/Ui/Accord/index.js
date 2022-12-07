@@ -10,7 +10,7 @@ import {
 import * as ic from "../../../components/icon";
 import { AccordStyled } from "./style";
 import Loader from "../Loading/loader";
-import { Message, messageCar, messageOther } from "../../../utils/messages";
+import { Message } from "../../../utils/messages";
 
 function Accord() {
   const personData = useSelector(({ user }) => user?.user);
@@ -198,7 +198,7 @@ function Accord() {
   const handleClick = ({ link, protoId, eventId, type }) => {
     if (!link || !personData?.id) return alert("Error Person id");
     setIsLoading(true);
-    let case_type = type;
+    // let case_type = type;
     const data = {
       insured_person_id: personData?.id,
       property_type_id: protoId,
@@ -278,7 +278,7 @@ function Accord() {
                 },
               })
             );
-            messageCar(message?.insurance_case?.id, case_type);
+            // messageCar(message?.insurance_case?.id, case_type);
             randomAppraiserComp(message?.insurance_case, true);
             setIsLoading(false);
             navigate(link);
@@ -293,7 +293,7 @@ function Accord() {
       if (!carBurglary?.report?.insurance_case?.id) {
         postRequest("/insurance-case", getFormData(data)).then(
           ({ message }) => {
-            messageCar(message?.insurance_case?.id, case_type);
+            // messageCar(message?.insurance_case?.id, case_type);
             randomAppraiserComp(message?.insurance_case, true);
             localStorage.setItem(
               "car_burglary",
@@ -318,7 +318,7 @@ function Accord() {
       if (!theftCar?.report?.insurance_case?.id) {
         postRequest("/insurance-case", getFormData(data)).then(
           ({ message }) => {
-            messageOther(message?.insurance_case?.id, case_type);
+            // messageOther(message?.insurance_case?.id, case_type);
             randomAppraiserComp(message?.insurance_case);
             localStorage.setItem(
               "theft_car",
@@ -343,7 +343,7 @@ function Accord() {
       if (!waterDamageHome?.report?.insurance_case?.id) {
         postRequest("/insurance-case", getFormData(data)).then(
           ({ message }) => {
-            messageOther(message?.insurance_case?.id);
+            // //messageOther(message?.insurance_case?.id);
             randomAppraiserComp(message?.insurance_case);
             localStorage.setItem(
               "waterDamageHome",
@@ -368,7 +368,7 @@ function Accord() {
       if (!waterDamageOffice?.report?.insurance_case?.id) {
         postRequest("/insurance-case", getFormData(data)).then(
           ({ message }) => {
-            messageOther(message?.insurance_case?.id);
+            //messageOther(message?.insurance_case?.id);
             randomAppraiserComp(message?.insurance_case);
             localStorage.setItem(
               "waterDamageOffice",
@@ -393,7 +393,7 @@ function Accord() {
       if (!fireDamageHome?.report?.insurance_case?.id) {
         postRequest("/insurance-case", getFormData(data)).then(
           ({ message }) => {
-            messageOther(message?.insurance_case?.id);
+            //messageOther(message?.insurance_case?.id);
             randomAppraiserComp(message?.insurance_case);
             localStorage.setItem(
               "fireDamageHome",
@@ -418,7 +418,7 @@ function Accord() {
       if (!fireDamageOffice?.report?.insurance_case?.id) {
         postRequest("/insurance-case", getFormData(data)).then(
           ({ message }) => {
-            messageOther(message?.insurance_case?.id);
+            //messageOther(message?.insurance_case?.id);
             randomAppraiserComp(message?.insurance_case);
             localStorage.setItem(
               "fireDamageOffice",
@@ -443,7 +443,7 @@ function Accord() {
       if (!burglaryHome?.report?.insurance_case?.id) {
         postRequest("/insurance-case", getFormData(data)).then(
           ({ message }) => {
-            messageOther(message?.insurance_case?.id);
+            //messageOther(message?.insurance_case?.id);
             randomAppraiserComp(message?.insurance_case);
             localStorage.setItem(
               "burglaryHome",
@@ -468,7 +468,7 @@ function Accord() {
       if (!burglaryOffice?.report?.insurance_case?.id) {
         postRequest("/insurance-case", getFormData(data)).then(
           ({ message }) => {
-            messageOther(message?.insurance_case?.id);
+            //messageOther(message?.insurance_case?.id);
             randomAppraiserComp(message?.insurance_case);
             localStorage.setItem(
               "burglaryOffice",
@@ -493,7 +493,7 @@ function Accord() {
       if (!person3dHomePage?.report?.insurance_case?.id) {
         postRequest("/insurance-case", getFormData(data)).then(
           ({ message }) => {
-            messageOther(message?.insurance_case?.id);
+            //messageOther(message?.insurance_case?.id);
             randomAppraiserComp(message?.insurance_case);
             localStorage.setItem(
               "person-3d-home",
@@ -518,7 +518,7 @@ function Accord() {
       if (!person3dOfficePage?.report?.insurance_case?.id) {
         postRequest("/insurance-case", getFormData(data)).then(
           ({ message }) => {
-            messageOther(message?.insurance_case?.id);
+            //messageOther(message?.insurance_case?.id);
             randomAppraiserComp(message?.insurance_case);
             localStorage.setItem(
               "person-3d-office",
@@ -543,7 +543,7 @@ function Accord() {
       if (!natureDamageHome?.report?.insurance_case?.id) {
         postRequest("/insurance-case", getFormData(data)).then(
           ({ message }) => {
-            messageOther(message?.insurance_case?.id);
+            // //messageOther(message?.insurance_case?.id);
             randomAppraiserComp(message?.insurance_case);
             localStorage.setItem(
               "natureDamageHome",
@@ -568,7 +568,7 @@ function Accord() {
       if (!natureDamageOffice?.report?.insurance_case?.id) {
         postRequest("/insurance-case", getFormData(data)).then(
           ({ message }) => {
-            messageOther(message?.insurance_case?.id);
+            //messageOther(message?.insurance_case?.id);
             randomAppraiserComp(message?.insurance_case);
             localStorage.setItem(
               "natureDamageOffice",
@@ -593,7 +593,7 @@ function Accord() {
       if (!otherHome?.report?.insurance_case?.id) {
         postRequest("/insurance-case", getFormData(data)).then(
           ({ message }) => {
-            messageOther(message?.insurance_case?.id);
+            //messageOther(message?.insurance_case?.id);
             randomAppraiserComp(message?.insurance_case);
             localStorage.setItem(
               "OtherHome",
@@ -618,7 +618,7 @@ function Accord() {
       if (!otherOffice?.report?.insurance_case?.id) {
         postRequest("/insurance-case", getFormData(data)).then(
           ({ message }) => {
-            messageOther(message?.insurance_case?.id);
+            //messageOther(message?.insurance_case?.id);
             randomAppraiserComp(message?.insurance_case);
             localStorage.setItem(
               "OtherOffice",

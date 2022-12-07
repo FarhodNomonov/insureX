@@ -219,7 +219,7 @@ function NatureOffice() {
             };
             console.log(report);
             localStorage.setItem("natureDamageOffice", JSON.stringify(report));
-            messageOther(message?.insurance_case?.id, "other");
+            //messageOther(message?.insurance_case?.id, "other");
           }
         );
       }
