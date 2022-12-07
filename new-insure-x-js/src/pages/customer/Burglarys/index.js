@@ -33,7 +33,7 @@ import {
   postRequest,
 } from "../../../utils/requestApi";
 import Loader from "../../../components/Ui/Loading/loader";
-import { AccidentForm, Paragraf } from "../accident/style";
+import { AccidentForm, Paragraf } from "../CarAccident/style";
 import { onSavePhoto } from "../../../utils/requestApi";
 import FormBefore from "../../../components/Steps/FormBefore";
 import PdfModal from "../../../components/Ui/Pdf";

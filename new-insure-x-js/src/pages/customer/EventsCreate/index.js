@@ -5,7 +5,7 @@ import Footer from "../../../components/Ui/FooterComponent";
 import Header from "../../../components/Ui/Header";
 import Accord from "../../../components/Ui/Accord";
 import Button from "../../../components/Ui/Button/Button";
-import { FooterQuestionBtn, Overlay } from "../home/style";
+import { FooterQuestionBtn, Overlay } from "../HomePage/style";
 import { MessageIcon, Question, QuestionIcon } from "../../../components/icon";
 import {
   Input,
@@ -18,7 +18,7 @@ import {
   ModalHeaderIconWrapper,
   ModalHeaderTitle,
   Modal,
-} from "../register/style";
+} from "../RegisterPage/style";
 
 function ReportPage() {
   const [isOpen, setIsOpen] = React.useState(false);

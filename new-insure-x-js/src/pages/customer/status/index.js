@@ -9,7 +9,7 @@ import {
 } from "../../../components/icon";
 import { CaseTypeExtract, getRequest } from "../../../utils/requestApi";
 import Loader from "../../../components/Ui/Loading/loader";
-import { HomeContainer } from "./../home/style";
+import { HomeContainer } from "../HomePage/style";
 import Footer from "../../../components/Ui/FooterComponent";
 import Header from "../../../components/Ui/Header";
 import { StatusType } from "../../../utils/status";

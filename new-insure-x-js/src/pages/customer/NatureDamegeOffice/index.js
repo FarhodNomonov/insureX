@@ -25,7 +25,7 @@ import {
   ModalHeader,
   ModalHeaderIconWrapper,
   ModalHeaderTitle,
-} from "../register/style";
+} from "../RegisterPage/style";
 import ModalIcon from "../../../assets/img/modalIcon.svg";
 import {
   getFormData,
@@ -34,7 +34,7 @@ import {
   postRequest,
 } from "../../../utils/requestApi";
 import Loader from "../../../components/Ui/Loading/loader";
-import { AccidentForm } from "../accident/style";
+import { AccidentForm } from "../CarAccident/style";
 import { onSavePhoto } from "../../../utils/requestApi";
 import FormBefore from "../../../components/Steps/FormBefore";
 import PdfModal from "../../../components/Ui/Pdf";

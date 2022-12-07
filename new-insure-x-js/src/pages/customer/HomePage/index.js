@@ -28,7 +28,7 @@ import {
   ModalHeaderIconWrapper,
   ModalHeaderTitle,
   WrapperInput,
-} from "../register/style";
+} from "../RegisterPage/style";
 import { Input } from "../../../components/Ui/FormElements/Styles";
 
 function HomePage() {
